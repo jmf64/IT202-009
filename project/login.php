@@ -34,7 +34,7 @@ if (isset($_POST["login"])) {
         $isValid = false;
         flash("Password missing");
     }
-    if (isset($email) && !strpos($email, "@")) {
+    if (!empty($email) && !strpos($email, "@")) {
         $isValid = false;
         //echo "<br>Invalid email<br>";
         flash("Invalid email");
