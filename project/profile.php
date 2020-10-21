@@ -63,6 +63,24 @@ if (isset($_POST["saved"])) {
             $newUsername = $username;
         }
     }
+
+    if (isset($_POST["currentPW"])) {
+        $currentPassword = $_POST["currentPW"];
+        $stmt = $db->prepare("SELECT password from Users where id = :id");
+        $r = $stmt->execute([":id" => get_user_id()]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result && isset($result["password"])) {
+            $password_hash_from_db = $result["password"];
+            if (!password_verify($currentPassword, $password_hash_from_db)) {
+                flash("Must provide current password");
+                $isValid == false;
+            }
+        }
+    } else {
+        flash("Must provide current password");
+        $isValid == false;
+    }
+
     if ($isValid) {
         $stmt = $db->prepare("UPDATE Users set email = :email, username= :username where id = :id");
         $r = $stmt->execute([":email" => $newEmail, ":username" => $newUsername, ":id" => get_user_id()]);
@@ -114,6 +132,8 @@ if (isset($_POST["saved"])) {
         <label for="username">Username</label>
         <input type="text" maxlength="60" name="username" value="<?php safer_echo(get_username()); ?>"/>
         <!-- DO NOT PRELOAD PASSWORD-->
+        <label for="currentPW">Current Password</label>
+        <input type="password" name="password"/>
         <label for="pw">Password</label>
         <input type="password" name="password"/>
         <label for="cpw">Confirm Password</label>
