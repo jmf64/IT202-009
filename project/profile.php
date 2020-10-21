@@ -64,8 +64,8 @@ if (isset($_POST["saved"])) {
         }
     }
 
-    if (isset($_POST["currentPW"])) {
-        $currentPassword = $_POST["currentPW"];
+    if (isset($_POST["currentPassword"])) {
+        $currentPassword = $_POST["currentPassword"];
         $stmt = $db->prepare("SELECT password from Users where id = :id");
         $r = $stmt->execute([":id" => get_user_id()]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -73,12 +73,12 @@ if (isset($_POST["saved"])) {
             $password_hash_from_db = $result["password"];
             if (!password_verify($currentPassword, $password_hash_from_db)) {
                 flash("Must provide current password");
-                $isValid == false;
+                $isValid = false;
             }
         }
     } else {
         flash("Must provide current password");
-        $isValid == false;
+        $isValid = false;
     }
 
     if ($isValid) {
