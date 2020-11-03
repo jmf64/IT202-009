@@ -16,10 +16,6 @@ if (!has_role("Admin")) {
             <option>Savings</option>
             <option>Loan</option>
         </select>
-        <label>Opened Date </label>
-        <input type="text" name="opened_date"/>
-        <label>Last Updated</label>
-        <input type="text" name="last_updated"/>
         <label>Balance</label>
         <input type="number" name="balance"/>
         <input type="submit" name="save" value="Create"/>
@@ -33,7 +29,7 @@ if(isset($_POST["save"])){
     $balance = $_POST["balance"];
     $user = get_user_id();
     $db = getDB();
-    $stmt = $db->prepare("INSERT INTO create_table_accounts (account_number, account_type, 
+    $stmt = $db->prepare("INSERT INTO Accounts (account_number, account_type, 
 balance, user_id) VALUES(:account_number, :account_type, :balance,:user)");
     $r = $stmt->execute([
         ":account_number"=>$account_number,

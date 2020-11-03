@@ -20,20 +20,20 @@ if(isset($_POST["save"])){
     $account_number = $_POST["account_number"];
     $account_type = $_POST["account_type"];
     $balance = $_POST["balance"];
-    $user = get_user_id();
+    $user_id = get_user_id();
     $db = getDB();
     if(isset($id)){
-        $stmt = $db->prepare("UPDATE create_table_accounts set account_number=:account_number,
-account_type=:account_type, balance=:balance, user=:user where id=:id");
+        $stmt = $db->prepare("UPDATE Accounts set account_number=:account_number,
+account_type=:account_type, balance=:balance, user_id=:user_id where id=:id");
         $r = $stmt->execute([
             ":account_number"=>$account_number,
             ":account_type"=>$account_type,
-            "balance"=>$balance,
-            ":user"=>$user
+            ":balance"=>$balance,
+            ":user_id"=>$user_id, ":id"=>$id
         ]);
 
         if($r){
-            flash("Updated successfully with id: " . $id);
+            flash("Updated successfully with id: " . $user_id);
         }
         else{
             $e = $stmt->errorInfo();
@@ -51,7 +51,7 @@ $result = [];
 if(isset($id)){
     $id = $_GET["id"];
     $db = getDB();
-    $stmt = $db->prepare("SELECT * FROM create_table_accounts where id = :id");
+    $stmt = $db->prepare("SELECT * FROM Accounts where id = :id");
     $r = $stmt->execute([":id"=>$id]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -67,12 +67,8 @@ if(isset($id)){
         <option value="savings" <?php echo ($result["account_type"] == "savings"?'selected="selected"':'');?>>Savings</option>
         <option value="loan" <?php echo ($result["account_type"] == "loan"?'selected="selected"':'');?>>Loan</option>
     </select>
-    <label>Opened Date</label>
-    <input type="text" name ="opened_date" value="<?php echo $result["opened_date"];?>"/>
-    <label>Last Updated</label>
-    <input type="text" name ="last_updated" value="<?php echo $result["last_updated"];?>"/>
     <label>Balance</label>
-    <input type="number" value="<?php echo $result["balance"];?>"/>
+    <input name ="balance" type="number" value="<?php echo $result["balance"];?>"/>
     <input type="submit" name="save" value="Update"/>
 </form>
 
