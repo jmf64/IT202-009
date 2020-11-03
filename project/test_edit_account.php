@@ -19,20 +19,15 @@ if(isset($_POST["save"])){
     //TODO add proper validation/checks
     $account_number = $_POST["account_number"];
     $account_type = $_POST["account_type"];
-    $opened_date = $_POST["opened_date"];
-    $last_updated = $_POST["last_updated"];
     $balance = $_POST["balance"];
-    $nst = date('Y-m-d H:i:s');//calc
     $user = get_user_id();
     $db = getDB();
     if(isset($id)){
-        $stmt = $db->prepare("UPDATE create_table_accounts set account_number:account_number, account_type:account_type, opened_date:opened_date, 
-last_updated:last_updated, balance:balance, user:user, where id=:id");
+        $stmt = $db->prepare("UPDATE create_table_accounts set account_number:account_number,
+account_type:account_type, balance:balance, user:user, where id=:id");
         $r = $stmt->execute([
             ":account_number"=>$account_number,
             ":account_type"=>$account_type,
-            ":opened_date"=>$opened_date,
-            ":last_updated"=>$last_updated,
             "balance"=>$balance,
             ":user"=>$user
         ]);
