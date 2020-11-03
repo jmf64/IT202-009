@@ -23,8 +23,8 @@ if(isset($_POST["save"])){
     $user = get_user_id();
     $db = getDB();
     if(isset($id)){
-        $stmt = $db->prepare("UPDATE create_table_accounts set account_number:account_number,
-account_type:account_type, balance:balance, user:user, where id=:id");
+        $stmt = $db->prepare("UPDATE create_table_accounts set account_number=:account_number,
+account_type=:account_type, balance=:balance, user=:user where id=:id");
         $r = $stmt->execute([
             ":account_number"=>$account_number,
             ":account_type"=>$account_type,
@@ -60,17 +60,17 @@ if(isset($id)){
 <form method="POST">
 
     <label>Account Number</label>
-    <input name="account number" placeholder="Account Number" value ="<?php echo $result["account_number"];?>"/>
+    <input name="account_number" placeholder="Account Number" value ="<?php echo $result["account_number"];?>"/>
     <label>Account Type</label>
-    <select name="account type" value="<?php echo $result["account_type"];?>>
-        <option <?php echo ($result["account_type"]?'selected="selected"':'');?>>Checking</option>
-        <option <?php echo ($result["account_type"]?'selected="selected"':'');?>>Savings</option>
-        <option <?php echo ($result["account_type"]?'selected="selected"':'');?>>Loan</option>
+    <select name="account_type" value="<?php echo $result["account_type"];?>">
+        <option value="checking" <?php echo ($result["account_type"] == "checking"?'selected="selected"':'');?>>Checking</option>
+        <option value="savings" <?php echo ($result["account_type"] == "savings"?'selected="selected"':'');?>>Savings</option>
+        <option value="loan" <?php echo ($result["account_type"] == "loan"?'selected="selected"':'');?>>Loan</option>
     </select>
     <label>Opened Date</label>
-    <input type="text" name ="opened_date" value="<?php echo $result["opened_date"];?>/>
+    <input type="text" name ="opened_date" value="<?php echo $result["opened_date"];?>"/>
     <label>Last Updated</label>
-    <input type="text" name ="last_updated" value="<?php echo $result["last_updated"];?>/>
+    <input type="text" name ="last_updated" value="<?php echo $result["last_updated"];?>"/>
     <label>Balance</label>
     <input type="number" value="<?php echo $result["balance"];?>"/>
     <input type="submit" name="save" value="Update"/>

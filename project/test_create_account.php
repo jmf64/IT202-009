@@ -9,9 +9,9 @@ if (!has_role("Admin")) {
 
     <form method="POST">
         <label>Account Number</label>
-        <input name="account number" placeholder="Account Number"/>
+        <input name="account_number" placeholder="Account Number"/>
         <label>Account Type</label>
-        <select name="account type">
+        <select name="account_type">
             <option>Checking</option>
             <option>Savings</option>
             <option>Loan</option>
@@ -34,7 +34,7 @@ if(isset($_POST["save"])){
     $user = get_user_id();
     $db = getDB();
     $stmt = $db->prepare("INSERT INTO create_table_accounts (account_number, account_type, 
-balance, user_id) VALUES(:account_number, :account_type, :opened_date, :last_updated,:balance,:user)");
+balance, user_id) VALUES(:account_number, :account_type, :balance,:user)");
     $r = $stmt->execute([
         ":account_number"=>$account_number,
         ":account_type"=>$account_type,
