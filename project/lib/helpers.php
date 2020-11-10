@@ -68,5 +68,16 @@ function getMessages() {
     return array();
 }
 
+function doTransaction($source, $destination, $amount, $type){
+    if ($type = "Deposit"){
+        //add amount to source
+    } elseif ($type = "Withdraw"){
+        //subtract amount from source
+    } elseif ($type = "Transfer"){
+        //add amount to source
+        //subtract amount from destination
+    }
+}
+
 //end flash
 ?>
