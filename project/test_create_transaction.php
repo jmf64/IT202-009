@@ -9,16 +9,20 @@ if (!has_role("Admin")) {
     <h3>Create Transaction</h3>
     <form method="POST">
         <label>Account Source ID</label>
-        <input name="act_src_id" placeholder="act_src_id"/>
+        <select>
+            <option value="1">Account Number #</option>
+        </select>
         <label>Account Destination ID</label>
-        <input type="number" name="act_dest_id"/>
+        <select>
+            <option value="1">Account Number #</option>
+        </select>
         <label>Amount</label>
         <input type="number" name="amount"/>
         <label>Action Type</label>
         <select name="action_type">
-            <option>Deposit</option>
-            <option>Withdraw</option>
-            <option>Transfer</option>
+            <option value="deposit">Deposit</option>
+            <option value="withdraw">Withdraw</option>
+            <option value="transfer">transfer</option>
         </select>
         <label>Memo</label>
         <input type="text" name="memo"/>

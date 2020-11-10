@@ -29,7 +29,7 @@ LEFT JOIN Accounts on Accounts.id = Transactions.account_number where Transactio
     }
 }
 ?>
-<h3>View Incubator</h3>
+<h3>Transactions</h3>
 <?php if (isset($result) && !empty($result)): ?>
     <div class="card">
         <div class="card-title">
