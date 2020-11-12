@@ -50,7 +50,7 @@ if (isset($_POST["save"])) {
     $action_type = $_POST["action_type"];
     $memo = $_POST["memo"];
     $user_id = get_user_id();
-    doTransaction($act_src_id, $act_dest_id, $amount, $action_type);
+    doTransaction($act_src_id,$act_dest_id,$amount,$action_type);
     $db = getDB();
     $stmt = $db->prepare("INSERT INTO Transactions (act_src_id, act_dest_id, amount, action_type, memo, user_id) 
 VALUES(:act_src_id, :act_dest_id, :action_type,:memo, :user_id)");

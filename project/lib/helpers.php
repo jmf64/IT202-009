@@ -75,9 +75,16 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
     $db = getDb();
-    $a1total = 0;//TODO get total of account 1
-    $a2total = 0;//TODO get total of account 2
-    $query = "INSERT INTO `Transactions` (`act_src_id`, `act_dest_id`, `amount`, `action_type`, `Total`) 
+
+    $stmt = $db->prepare("SELECT balance FROM Accounts WHERE id = :source");
+    $stmt->execute([":source" => $source]);
+    $a1total = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $stmt = $db->prepare("SELECT balance FROM Accounts WHERE id = :source");
+    $stmt->execute([":destination" => $destination]);
+    $a2total = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $query = "INSERT INTO `Transactions` (`act_src_id`, `act_dest_id`, `amount`, `action_type`, `expected_total`) 
 	VALUES(:p1a1, :p1a2, :p1change, :type, :a1total), 
 			(:p2a1, :p2a2, :p2change, :type, :a2total)";
 
@@ -131,5 +138,4 @@ if(isset($_POST['type']) && isset($_POST['act_src_id']) && isset($_POST['amount'
     }
 }
 
-//end flash
 ?>
