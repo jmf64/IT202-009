@@ -33,7 +33,7 @@ if (isset($_POST["save"])) {
             flash("Error updating: " . var_export($e, true));
         }
         $id++;
-        $amount*=1;
+        $amount *= -1;
         $stmt = $db->prepare("UPDATE Transactions set amount=:amount, where id=:id");
         $r = $stmt->execute([
             ":amount" => $amount,
@@ -70,7 +70,7 @@ $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <h3>Edit Transaction</h3>
     <form method="POST">
         <label></label>
-        <input name="act_src_id" placeholder="act_src_id" value="<?php echo $result["act_src_id"]; ?>"/>
+        <input name="act_src_id" value="<?php echo $result["act_src_id"]; ?>"/>
         <label>Transaction</label>
         <label>Amount</label>
         <input type="number" name="amount" value="<?php echo $result["amount"]; ?>"/>

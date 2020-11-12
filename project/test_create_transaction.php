@@ -5,24 +5,36 @@ if (!has_role("Admin")) {
     flash("You don't have permission to access this page");
     die(header("Location: login.php"));
 }
+
+$db = getDB();
+$stmt = $db->prepare("SELECT account_number, id FROM Accounts LIMIT 10");
+$r = $stmt->execute();
+$accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
     <h3>Create Transaction</h3>
     <form method="POST">
         <label>Account Source ID</label>
-        <select>
-            <option value="1">Account Number #</option>
+        <select name="act_src_id">
+            <?php foreach ($accounts as $account): ?>
+                <option value="<?php safer_echo($account["id"]); ?>"
+                ><?php safer_echo($account["account_number"]); ?></option>
+            <?php endforeach;?>
         </select>
         <label>Account Destination ID</label>
-        <select>
-            <option value="1">Account Number #</option>
+        <select name="act_dest_id">
+            <?php foreach ($accounts as $account): ?>
+                <option value="<?php safer_echo($account["id"]); ?>"
+                ><?php safer_echo($account["account_number"]); ?></option>
+            <?php endforeach;?>
         </select>
         <label>Amount</label>
-        <input type="number" name="amount"/>
+        <input type="number" name="amount" min="0" placeholder="0.00"/>
         <label>Action Type</label>
         <select name="action_type">
             <option value="deposit">Deposit</option>
             <option value="withdraw">Withdraw</option>
-            <option value="transfer">transfer</option>
+            <option value="transfer">Transfer</option>
         </select>
         <label>Memo</label>
         <input type="text" name="memo"/>

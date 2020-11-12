@@ -125,7 +125,8 @@ if(isset($_POST['type']) && isset($_POST['act_src_id']) && isset($_POST['amount'
             doTransaction($_POST['act_src_id'], "000000000000", ($amount * -1), $type);
             break;
         case 'transfer':
-            //TODO figure it out
+            doTransaction($_POST['act_src_id'], "act_dest_id", ($amount * -1), $type);
+            doTransaction($_POST['act_dest_id'], "act_src_id", ($amount * -1), $type);
             break;
     }
 }

@@ -15,6 +15,7 @@ if (!has_role("Admin")) {
             <option>Checking</option>
             <option>Savings</option>
             <option>Loan</option>
+            <option>World</option>
         </select>
         <label>Balance</label>
         <input type="number" name="balance"/>
