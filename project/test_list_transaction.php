@@ -16,7 +16,7 @@ if (isset($_POST["search"]) && !empty($query)) {
     $db = getDB();
     $stmt = $db->prepare("SELECT Transactions.id, Transactions.act_src_id, Transactions.act_dest_id, Transactions.amount, 
 Accounts.account_number, Users.username from Transactions JOIN Accounts on 
-Transactions.Accounts_id = Accounts.id JOIN Users on Accounts.user_id = Users.username WHERE users.username like :q LIMIT 10");
+Transactions.Accounts_id = Accounts.id JOIN Users on Accounts.user_id = Users.id WHERE users.username like :q LIMIT 10");
     $r = $stmt->execute([":q" => "%$query%"]);
     if ($r) {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);

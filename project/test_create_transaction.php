@@ -48,7 +48,8 @@ if (isset($_POST["save"])) {
     $db = getDB();
     $stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number = :'000000000000'");
     $stmt->execute([":000000000000" => $world_id]);
-    $world_id = $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $world_id = $result["id"];
 
     $act_src_id = $_POST["act_src_id"];
     $act_dest_id = $_POST["act_dest_id"];
@@ -62,14 +63,13 @@ if (isset($_POST["save"])) {
         $amount = (int)$_POST['amount'];
         switch ($type) {
             case 'deposit':
-                doTransaction("world_id", $_POST['act_dest_id'], ($amount * -1), $type);
+                doTransaction($world_id, $act_dest_id, ($amount * -1), $type);
                 break;
             case 'withdraw':
-                doTransaction($_POST['act_src_id'], "world_id", ($amount * -1), $type);
+                doTransaction($act_src_id, $world_id, ($amount * -1), $type);
                 break;
             case 'transfer':
-                doTransaction($_POST['act_src_id'], "act_dest_id", ($amount * -1), $type);
-                doTransaction($_POST['act_dest_id'], "act_src_id", ($amount * -1), $type);
+                doTransaction($act_src_id, $act_dest_id, ($amount * -1), $type);
                 break;
         }
     }
