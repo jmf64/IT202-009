@@ -69,9 +69,7 @@ $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
     <h3>Edit Transaction</h3>
     <form method="POST">
-        <label></label>
-        <input name="act_src_id" value="<?php echo $result["act_src_id"]; ?>"/>
-        <label>Transaction</label>
+        <label>Edit Transaction</label>
         <label>Amount</label>
         <input type="number" name="amount" value="<?php echo $result["amount"]; ?>"/>
         <input type="submit" name="save" value="Update"/>

@@ -14,9 +14,7 @@ if (isset($_POST["query"])) {
 }
 if (isset($_POST["search"]) && !empty($query)) {
     $db = getDB();
-    $stmt = $db->prepare("SELECT Transactions.id, Transactions.act_src_id, Transactions.act_dest_id, Transactions.amount, 
-Accounts.account_number, Users.username from Transactions JOIN Accounts on 
-Transactions.Accounts_id = Accounts.id JOIN Users on Accounts.user_id = Users.id WHERE users.username like :q LIMIT 10");
+    $stmt = $db->prepare("SELECT id, act_src_id, act_dest_id, amount, action_type, memo, created FROM Transactions WHERE act_src_id LIKE :q LIMIT 10");
     $r = $stmt->execute([":q" => "%$query%"]);
     if ($r) {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -49,8 +47,16 @@ Transactions.Accounts_id = Accounts.id JOIN Users on Accounts.user_id = Users.id
                         <div><?php safer_echo($r["amount"]); ?></div>
                     </div>
                     <div>
-                        <div>User:</div>
-                        <div><?php safer_echo($r["username"]); ?></div>
+                        <div>Action Type:</div>
+                        <div><?php safer_echo($r["action_type"]); ?></div>
+                    </div>
+                    <div>
+                        <div>Memo:</div>
+                        <div><?php safer_echo($r["memo"]); ?></div>
+                    </div>
+                    <div>
+                        <div>Created:</div>
+                        <div><?php safer_echo($r["created"]); ?></div>
                     </div>
                     <div>
                         <a type="button" href="test_edit_transaction.php?id=<?php safer_echo($r['id']); ?>">Edit</a>

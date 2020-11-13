@@ -74,16 +74,6 @@ if (isset($_POST["save"])) {
         }
     }
 
-    $db = getDB();
-    $stmt = $db->prepare("INSERT INTO Transactions (act_src_id, act_dest_id, amount, action_type, memo, user_id) 
-VALUES(:act_src_id, :act_dest_id, :action_type,:memo, :user_id)");
-    $r = $stmt->execute([
-        ":act_src_id" => $act_src_id,
-        ":act_dest_id" => $act_dest_id,
-        ":action_type" => $action_type,
-        ":memo" => $memo,
-        ":user" => $user_id
-    ]);
     if ($r) {
         flash("Created successfully with id: " . $db->lastInsertId());
     }
