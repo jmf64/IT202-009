@@ -80,7 +80,7 @@ error_reporting(E_ALL);
     $stmt->execute([":source" => $source]);
     $a1total = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $stmt = $db->prepare("SELECT balance FROM Accounts WHERE id = :source");
+    $stmt = $db->prepare("SELECT balance FROM Accounts WHERE id = :destination");
     $stmt->execute([":destination" => $destination]);
     $a2total = $stmt->fetch(PDO::FETCH_ASSOC);
 
