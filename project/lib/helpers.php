@@ -86,6 +86,9 @@ error_reporting(E_ALL);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $a2total = $result["total"];
 
+    $a1total -= $amount;
+    $a2total += $amount;
+
     $query = "INSERT INTO `Transactions` (`act_src_id`, `act_dest_id`, `amount`, `action_type`, `expected_total`) 
 	VALUES(:p1a1, :p1a2, :p1change, :type, :a1total), 
 			(:p2a1, :p2a2, :p2change, :type, :a2total)";
