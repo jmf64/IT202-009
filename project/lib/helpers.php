@@ -106,36 +106,3 @@ error_reporting(E_ALL);
     return $result;
 }
 ?>
-    <form method="POST">
-        <input type="text" name="act_src_id" placeholder="Account Number">
-        <!-- If our sample is a transfer show other account field-->
-        <?php if($_GET['type'] == 'transfer') : ?>
-            <input type="text" name="act_dest_id" placeholder="Other Account Number">
-        <?php endif; ?>
-
-        <input type="number" name="amount" placeholder="$0.00"/>
-        <input type="hidden" name="type" value="<?php echo $_GET['type'];?>"/>
-
-        <!--Based on sample type change the submit button display-->
-        <input type="submit" value="Move Money"/>
-    </form>
-
-    <?php
-if(isset($_POST['type']) && isset($_POST['act_src_id']) && isset($_POST['amount'])){
-    $type = $_POST['type'];
-    $amount = (int)$_POST['amount'];
-    switch($type){
-        case 'deposit':
-            doTransaction("000000000000", $_POST['act_dest_id'], ($amount * -1), $type);
-            break;
-        case 'withdraw':
-            doTransaction($_POST['act_src_id'], "000000000000", ($amount * -1), $type);
-            break;
-        case 'transfer':
-            doTransaction($_POST['act_src_id'], "act_dest_id", ($amount * -1), $type);
-            doTransaction($_POST['act_dest_id'], "act_src_id", ($amount * -1), $type);
-            break;
-    }
-}
-
-?>

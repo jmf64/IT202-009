@@ -44,13 +44,36 @@ $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php
 if (isset($_POST["save"])) {
     //TODO add proper validation/checks
+    $world_id = 2;
+    $db = getDB();
+    $stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number = :'000000000000'");
+    $stmt->execute([":000000000000" => $world_id]);
+    $world_id = $stmt->fetch(PDO::FETCH_ASSOC);
+
     $act_src_id = $_POST["act_src_id"];
     $act_dest_id = $_POST["act_dest_id"];
     $amount = $_POST["amount"];
     $action_type = $_POST["action_type"];
     $memo = $_POST["memo"];
     $user_id = get_user_id();
-    doTransaction($act_src_id,$act_dest_id,$amount,$action_type);
+
+    if (isset($_POST['type']) && isset($_POST['act_src_id']) && isset($_POST['amount'])) {
+        $type = $_POST['type'];
+        $amount = (int)$_POST['amount'];
+        switch ($type) {
+            case 'deposit':
+                doTransaction("world_id", $_POST['act_dest_id'], ($amount * -1), $type);
+                break;
+            case 'withdraw':
+                doTransaction($_POST['act_src_id'], "world_id", ($amount * -1), $type);
+                break;
+            case 'transfer':
+                doTransaction($_POST['act_src_id'], "act_dest_id", ($amount * -1), $type);
+                doTransaction($_POST['act_dest_id'], "act_src_id", ($amount * -1), $type);
+                break;
+        }
+    }
+
     $db = getDB();
     $stmt = $db->prepare("INSERT INTO Transactions (act_src_id, act_dest_id, amount, action_type, memo, user_id) 
 VALUES(:act_src_id, :act_dest_id, :action_type,:memo, :user_id)");

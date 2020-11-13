@@ -30,9 +30,6 @@ Users.username FROM Accounts JOIN Users on Accounts.user_id = Users.id where Acc
 ?>
 <?php if (isset($result) && !empty($result)): ?>
     <div class="card">
-        <div class="card-title">
-            <?php safer_echo($result["name"]); ?>
-        </div>
         <div class="card-body">
             <div>
                 <p>Info</p>
