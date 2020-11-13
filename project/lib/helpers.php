@@ -78,11 +78,13 @@ error_reporting(E_ALL);
 
     $stmt = $db->prepare("SELECT balance FROM Accounts WHERE id = :source");
     $stmt->execute([":source" => $source]);
-    $a1total = $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $a1total = $result["id"];
 
     $stmt = $db->prepare("SELECT balance FROM Accounts WHERE id = :destination");
     $stmt->execute([":destination" => $destination]);
-    $a2total = $stmt->fetch(PDO::FETCH_ASSOC);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $a2total = $result["id"];
 
     $query = "INSERT INTO `Transactions` (`act_src_id`, `act_dest_id`, `amount`, `action_type`, `expected_total`) 
 	VALUES(:p1a1, :p1a2, :p1change, :type, :a1total), 
