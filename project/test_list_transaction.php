@@ -14,8 +14,8 @@ if (isset($_POST["query"])) {
 }
 if (isset($_POST["search"]) && !empty($query)) {
     $db = getDB();
-    $stmt = $db->prepare("SELECT id, act_src_id, act_dest_id, amount, action_type, memo, created FROM Transactions WHERE act_src_id LIKE :q LIMIT 10");
-    $r = $stmt->execute([":q" => "%$query%"]);
+    $stmt = $db->prepare("SELECT id, act_src_id, act_dest_id, amount, action_type, memo, created FROM Transactions WHERE act_src_id = :q LIMIT 10");
+    $r = $stmt->execute([":q" => $query]);
     if ($r) {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

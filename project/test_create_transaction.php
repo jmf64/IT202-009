@@ -46,8 +46,8 @@ if (isset($_POST["save"])) {
     //TODO add proper validation/checks
     $world_id = 2;
     $db = getDB();
-    $stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number = :'000000000000'");
-    $stmt->execute([":000000000000" => $world_id]);
+    $stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number = '000000000000'");
+    $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $world_id = $result["id"];
 
@@ -58,18 +58,16 @@ if (isset($_POST["save"])) {
     $memo = $_POST["memo"];
     $user_id = get_user_id();
 
-    if (isset($_POST['type']) && isset($_POST['act_src_id']) && isset($_POST['amount'])) {
-        $type = $_POST['type'];
-        $amount = (int)$_POST['amount'];
-        switch ($type) {
+    if (isset($_POST['action_type']) && isset($_POST['act_src_id']) && isset($_POST['amount'])) {
+        switch ($action_type) {
             case 'deposit':
-                doTransaction($world_id, $act_dest_id, ($amount * -1), $type);
+                doTransaction($world_id, $act_dest_id, ($amount * -1), $action_type);
                 break;
             case 'withdraw':
-                doTransaction($act_src_id, $world_id, ($amount * -1), $type);
+                doTransaction($act_src_id, $world_id, ($amount * -1), $action_type);
                 break;
             case 'transfer':
-                doTransaction($act_src_id, $act_dest_id, ($amount * -1), $type);
+                doTransaction($act_src_id, $act_dest_id, ($amount * -1), $action_type);
                 break;
         }
     }
