@@ -62,10 +62,7 @@ if (isset($id)) {
     $r = $stmt->execute([":id" => $id]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 }
-$db = getDB();
-$stmt = $db->prepare("SELECT id,account_number from Accounts LIMIT 10");
-$r = $stmt->execute();
-$accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
     <h3>Edit Transaction</h3>
     <form method="POST">
