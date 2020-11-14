@@ -61,13 +61,13 @@ if (isset($_POST["save"])) {
     if (isset($_POST['action_type']) && isset($_POST['act_src_id']) && isset($_POST['amount'])) {
         switch ($action_type) {
             case 'deposit':
-                doTransaction($world_id, $act_dest_id, ($amount * -1), $action_type);
+                doTransaction($world_id, $act_dest_id, ($amount * -1), $action_type, $memo);
                 break;
             case 'withdraw':
-                doTransaction($act_src_id, $world_id, ($amount * -1), $action_type);
+                doTransaction($act_src_id, $world_id, ($amount * -1), $action_type, $memo);
                 break;
             case 'transfer':
-                doTransaction($act_src_id, $act_dest_id, ($amount * -1), $action_type);
+                doTransaction($act_src_id, $act_dest_id, ($amount * -1), $action_type, $memo);
                 break;
         }
     }

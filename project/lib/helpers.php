@@ -68,30 +68,30 @@ function getMessages() {
     return array();
 }
 
-function doTransaction($source, $destination, $amount, $type) {
+function doTransaction($source, $destination, $amount, $type, $memo) {
 
-ini_set('display_errors',1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+    ini_set('display_errors',1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 
     $db = getDb();
 
     $stmt = $db->prepare("SELECT ifnull(sum(amount),0) as total from Transactions where act_src_id = :id");
     $stmt->execute([":id" => $source]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $a1total = $result["total"];
+    $a1total = (int)$result["total"];
 
     $stmt = $db->prepare("SELECT ifnull(sum(amount),0) as total from Transactions where act_src_id = :id");
     $stmt->execute([":id" => $destination]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $a2total = $result["total"];
+    $a2total = (int)$result["total"];
 
     $a1total -= $amount;
     $a2total += $amount;
 
-    $query = "INSERT INTO `Transactions` (`act_src_id`, `act_dest_id`, `amount`, `action_type`, `expected_total`) 
-	VALUES(:p1a1, :p1a2, :p1change, :type, :a1total), 
-			(:p2a1, :p2a2, :p2change, :type, :a2total)";
+    $query = "INSERT INTO `Transactions` (`act_src_id`, `act_dest_id`, `amount`, `action_type`, `expected_total`, `memo`) 
+	VALUES(:p1a1, :p1a2, :p1change, :type, :a1total, :memo), 
+			(:p2a1, :p2a2, :p2change, :type, :a2total, :memo)";
 
     $stmt = $db->prepare($query);
     $stmt->bindValue(":p1a1", $source);
@@ -99,6 +99,7 @@ error_reporting(E_ALL);
     $stmt->bindValue(":p1change", $amount);
     $stmt->bindValue(":type", $type);
     $stmt->bindValue(":a1total", $a1total);
+    $stmt->bindValue(":memo", $memo);
     //flip data for other half of transaction
     $stmt->bindValue(":p2a1", $destination);
     $stmt->bindValue(":p2a2", $source);
@@ -106,8 +107,8 @@ error_reporting(E_ALL);
     $stmt->bindValue(":type", $type);
     $stmt->bindValue(":a2total", $a2total);
     $result = $stmt->execute();
-    echo var_export($result, true);
-    echo var_export($stmt->errorInfo(), true);
+    //echo var_export($result, true);
+    //echo var_export($stmt->errorInfo(), true);
     return $result;
 }
 ?>

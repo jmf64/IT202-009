@@ -20,7 +20,7 @@ if (isset($_POST["save"])) {
     $db = getDB();
     if (isset($id)) {
         $amount *= -1;
-        $stmt = $db->prepare("UPDATE Transactions set amount=:amount, where id=:id");
+        $stmt = $db->prepare("UPDATE Transactions set amount=:amount where id=:id");
         $r = $stmt->execute([
             ":amount" => $amount,
             ":id" => $id
@@ -34,7 +34,7 @@ if (isset($_POST["save"])) {
         }
         $id++;
         $amount *= -1;
-        $stmt = $db->prepare("UPDATE Transactions set amount=:amount, where id=:id");
+        $stmt = $db->prepare("UPDATE Transactions set amount=:amount where id=:id");
         $r = $stmt->execute([
             ":amount" => $amount,
             ":id" => $id
