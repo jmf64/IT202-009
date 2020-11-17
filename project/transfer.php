@@ -3,8 +3,8 @@
 
 $user_id = get_user_id();
 $db = getDB();
-$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE Accounts.user_id = user_id LIMIT 5");
-$r = $stmt->execute();
+$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE Accounts.user_id = :user_id LIMIT 25");
+$r = $stmt->execute([":user_id" => $user_id]);
 $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
