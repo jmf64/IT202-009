@@ -9,7 +9,7 @@ if (isset($_POST["query"])) {
 if (isset($_POST["search"]) && !empty($query)) {
     $db = getDB();
     $stmt = $db->prepare("SELECT id, account_number, account_type, balance, user_id 
-from Accounts WHERE account_number like :q WHERE accounts.user_id = user_id LIMIT 5");
+from Accounts WHERE Accounts.user_id = user_id LIMIT 5");
     $r = $stmt->execute([":q" => "%$query%"]);
     if ($r) {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
