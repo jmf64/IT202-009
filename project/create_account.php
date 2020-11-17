@@ -35,6 +35,7 @@ while ($i < 100){
         ]);
         if ($r) {
             flash("Created successfully with id: " . $db->lastInsertId());
+            die(header("Location: list_account.php"));
             break;
         } else {
             $e = $stmt->errorInfo();
@@ -43,7 +44,6 @@ while ($i < 100){
     }
     $i++;
 }
-die(header("Location: list_account.php"));
 ?>
 
 
