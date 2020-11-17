@@ -1,5 +1,6 @@
 <?php require_once(__DIR__ . "/partials/nav.php"); ?>
 <?php
+$user_id = get_user_id();
 $query = "";
 $results = [];
 if (isset($_POST["query"])) {
@@ -8,7 +9,7 @@ if (isset($_POST["query"])) {
 if (isset($_POST["search"]) && !empty($query)) {
     $db = getDB();
     $stmt = $db->prepare("SELECT id, account_number, account_type, balance, user_id 
-from Accounts WHERE account_number like :q LIMIT 10");
+from Accounts WHERE account_number like :q WHERE accounts.user_id = user_id LIMIT 5");
     $r = $stmt->execute([":q" => "%$query%"]);
     if ($r) {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -28,7 +29,6 @@ $counter = 0;
     <?php if (count($results) > 0): ?>
         <div class="list-group">
             <?php foreach ($results as $r): ?>
-                <?php $counter++; ?>
                 <div class="list-group-item">
                     <div>
                         <div>Account Number:</div>
@@ -47,9 +47,6 @@ $counter = 0;
                         <div><?php safer_echo($r["user_id"]); ?></div>
                     </div>
                 </div>
-                <?php if ($counter == 5): ?>
-                    <?php break; ?>
-                <?php endif; ?>
             <?php endforeach; ?>
         </div>
     <?php else: ?>

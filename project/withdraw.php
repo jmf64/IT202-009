@@ -1,13 +1,14 @@
 <?php require_once(__DIR__ . "/partials/nav.php"); ?>
 <?php
 
+$user_id = get_user_id();
 $db = getDB();
-$stmt = $db->prepare("SELECT account_number, id FROM Accounts LIMIT 5");
+$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE accounts.user_id = user_id LIMIT 5");
 $r = $stmt->execute();
 $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-    <h3>Deposit</h3>
+    <h3>Withdraw</h3>
     <form method="POST">
         <label>Account ID</label>
         <select name="act_id">
@@ -37,7 +38,6 @@ if (isset($_POST["save"])) {
     $amount = $_POST["amount"];
     $action_type = 'withdraw';
     $memo = $_POST["memo"];
-    $user_id = get_user_id();
 
     if (isset($_POST['act_id']) && isset($_POST['amount'])) {
         switch ($action_type) {
