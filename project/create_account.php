@@ -41,6 +41,7 @@ while ($i < 100){
             //flash("Error creating: " . var_export($e, true));
         }
     }
+    $i++;
 }
 die(header("Location: list_account.php"));
 ?>
