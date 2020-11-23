@@ -14,7 +14,7 @@ if (isset($_POST["search"]) && !empty($query)) {
     $world_id = $result["id"];
     //need to fix this
     $stmt = $db->prepare("SELECT act_src_id, act_dest_id, amount, action_type, memo, created FROM Transactions 
-WHERE act_src_id = $world_id OR act_dest_id = $world_id LIMIT 10");
+WHERE act_src_id = :q OR act_dest_id = :q LIMIT 10");
     $r = $stmt->execute([":q" => $query]);
     if ($r) {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
