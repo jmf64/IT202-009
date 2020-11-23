@@ -1,3 +1,4 @@
+<?php require_once(__DIR__ . "/partials/nav.php"); ?>
 <?php
 $query = "";
 $results = [];
@@ -64,3 +65,4 @@ WHERE act_src_id = $world_id OR act_dest_id = $world_id LIMIT 10");
         <p>No results</p>
     <?php endif; ?>
 </div>
+<?php require(__DIR__ . "/partials/flash.php");
