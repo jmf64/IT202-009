@@ -7,6 +7,10 @@ $stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE Accounts.use
 $r = $stmt->execute([":user_id" => $user_id]);
 $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE account_number != '000000000000' LIMIT 25");
+$r = $stmt->execute();
+$dest_accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
     <h3>Create Transaction</h3>
     <form method="POST">
@@ -19,7 +23,7 @@ $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </select>
         <label>Account Destination ID</label>
         <select name="act_dest_id">
-            <?php foreach ($accounts as $account): ?>
+            <?php foreach ($dest_accounts as $account): ?>
                 <option value="<?php safer_echo($account["id"]); ?>"
                 ><?php safer_echo($account["account_number"]); ?></option>
             <?php endforeach;?>
