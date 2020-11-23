@@ -5,7 +5,7 @@ $results = [];
 if (isset($_POST["query"])) {
     $query = $_POST["query"];
 }
-if (isset($_POST["search"]) && !empty($query)) {
+if (!empty($query)) {
     $world_id = 2;
     $db = getDB();
     $stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number = '000000000000'");
@@ -25,23 +25,11 @@ WHERE act_src_id = $world_id OR act_dest_id = $world_id LIMIT 10");
 }
 ?>
 <h3>Transaction History</h3>
-<form method="POST">
-    <input name="query" placeholder="Search" value="<?php safer_echo($query); ?>"/>
-    <input type="submit" value="Search" name="search"/>
-</form>
 <div class="results">
     <?php if (count($results) > 0): ?>
         <div class="list-group">
             <?php foreach ($results as $r): ?>
                 <div class="list-group-item">
-                    <div>
-                        <div>Account Source ID:</div>
-                        <div><?php safer_echo($r["act_src_id"]); ?></div>
-                    </div>
-                    <div>
-                        <div>Account Destination ID:</div>
-                        <div><?php safer_echo($r["act_dest_id"]); ?></div>
-                    </div>
                     <div>
                         <div>Amount:</div>
                         <div><?php safer_echo($r["amount"]); ?></div>
