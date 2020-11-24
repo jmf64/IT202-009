@@ -20,17 +20,6 @@ if(isset($account_id)) {
         ":user_id" => $user_id
     ]);
 
-    if($r){
-        $results = $stmt->fetch(PDO::FETCH_ASSOC);
-        $account_number = $results["account_number"];
-        $account_type = $results["account_type"];
-    } else {
-        $e = $stmt->errorInfo();
-        flash("There was an error fetching account info " . var_export($e, true));
-    }
-}
-
-if(isset($account_id) && isset($account_number) && isset($account_type)){
     $stmt = $db->prepare("SELECT amount, action_type, memo, created FROM Transactions WHERE act_src_id = :account_id LIMIT 10");
     $r = $stmt->execute(["account_id" => $account_id]);
     if ($r) {
@@ -39,8 +28,6 @@ if(isset($account_id) && isset($account_number) && isset($account_type)){
         $e = $stmt->errorInfo();
         flash("There was an error fetching transaction info " . var_export($e, true));
     }
-} else {
-    flash("There was a problem fetching the results.");
 }
 ?>
 <h3>Transaction History</h3>
