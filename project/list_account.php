@@ -1,5 +1,11 @@
 <?php require_once(__DIR__ . "/partials/nav.php"); ?>
 <?php
+
+if (!is_logged_in()) {
+    flash("You must be logged in to access this page");
+    die(header("Location: login.php"));
+}
+
 $user_id = get_user_id();
 $query = "";
 $results = [];
@@ -47,7 +53,7 @@ from Accounts WHERE Accounts.user_id = :user_id LIMIT 5");
                         <div><?php safer_echo($r["user_id"]); ?></div>
                     </div>
                     <div>
-                        <a type="button" href="transaction_history.php">View Transaction History</a>
+                        <a type="button" href="transaction_history.php?id="<?php safer_echo($r['id']);?>">View Transaction History</a>
                     </div>
                 </div>
             <?php endforeach; ?>

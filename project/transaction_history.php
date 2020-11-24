@@ -1,54 +1,68 @@
 <?php require_once(__DIR__ . "/partials/nav.php"); ?>
 <?php
-$query = "";
-$results = [];
-if (isset($_POST["query"])) {
-    $query = $_POST["query"];
+
+if (!is_logged_in()) {
+    flash("You must be logged in to access this page");
+    die(header("Location: login.php"));
 }
-if (isset($_POST["search"]) && !empty($query)) {
-    $world_id = 2;
-    $db = getDB();
-    $stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number = '000000000000'");
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $world_id = $result["id"];
-    //need to fix this
-    $stmt = $db->prepare("SELECT act_src_id, act_dest_id, amount, action_type, memo, created FROM Transactions 
-WHERE act_src_id = :q OR act_dest_id = :q LIMIT 10");
-    $r = $stmt->execute([":q" => $query]);
+
+if(isset($_GET["id"])){
+    $account_id = $_GET["id"];
+}
+
+$db = getDB();
+$user_id = get_user_id();
+
+if(isset($account_id)) {
+    $stmt = $db->prepare("SELECT account_number FROM Accounts WHERE id = :id AND user_id = :user_id");
+    $r = $stmt->execute([
+        ":id" => $account_id,
+        ":user_id" => $user_id
+    ]);
+
+    if($r){
+        $results = $stmt->fetch(PDO::FETCH_ASSOC);
+        $account_number = $results["account_number"];
+    }else {
+        $e = $stmt->errorInfo();
+        flash("There was an error fetching account info " . var_export($e, true));
+    }
+}
+
+if(isset($account_id) && isset($account_number)){
+    $stmt = $db->prepare("SELECT amount, action_type, memo, created FROM Transactions WHERE act_src_id = :account_id LIMIT 10");
+    $r = $stmt->execute(["account_id" => $account_id]);
     if ($r) {
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        $e = $stmt->errorInfo();
+        flash("There was an error fetching transaction info " . var_export($e, true));
     }
-    else {
-        flash("There was a problem fetching the results " . var_export($stmt->errorInfo(), true));
-    }
+} else {
+    flash("There was a problem fetching the results.");
 }
 ?>
 <h3>Transaction History</h3>
-<form method="POST">
-    <input name="query" placeholder="Search" value="<?php safer_echo($query); ?>"/>
-    <input type="submit" value="Search" name="search"/>
-</form>
 <div class="results">
-    <?php if (count($results) > 0): ?>
+    <?php if (count($transactions) > 0): ?>
         <div class="list-group">
-            <?php foreach ($results as $r): ?>
+            <?php foreach ($transactions as $t): ?>
                 <div class="list-group-item">
                     <div>
                         <div>Amount:</div>
-                        <div><?php safer_echo($r["amount"]); ?></div>
+                        <div><?php safer_echo($t["amount"]); ?></div>
                     </div>
                     <div>
                         <div>Action Type:</div>
-                        <div><?php safer_echo($r["action_type"]); ?></div>
+                        <div><?php safer_echo($t["action_type"]); ?></div>
                     </div>
                     <div>
                         <div>Memo:</div>
-                        <div><?php safer_echo($r["memo"]); ?></div>
+                        <div><?php safer_echo($t["memo"]); ?></div>
                     </div>
                     <div>
                         <div>Created:</div>
-                        <div><?php safer_echo($r["created"]); ?></div>
+                        <div><?php safer_echo($t["created"]); ?></div>
                     </div>
                 </div>
             <?php endforeach; ?>
