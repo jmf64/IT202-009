@@ -53,7 +53,7 @@ from Accounts WHERE Accounts.user_id = :user_id LIMIT 5");
                         <div><?php safer_echo($r["user_id"]); ?></div>
                     </div>
                     <div>
-                        <a type="button" href="transaction_history.php?id="<?php safer_echo($r['id']);?>">View Transaction History</a>
+                        <a type="button" href="transaction_history.php?id=<?php safer_echo($r['id']);?>">View Transaction History</a>
                     </div>
                 </div>
             <?php endforeach; ?>
