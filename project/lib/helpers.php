@@ -89,6 +89,12 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $a1total -= $amount;
     $a2total += $amount;
 
+    $query2 = "UPDATE Accounts set balance :b where act_src_id = :id";
+    $query2->execute([":id" => $source, ":b" => $a1total]);
+
+    $query2 = "UPDATE Accounts set balance :b where act_src_id = :id";
+    $query2->execute([":id" => $destination, ":b" => $a2total]);
+
     $query = "INSERT INTO `Transactions` (`act_src_id`, `act_dest_id`, `amount`, `action_type`, `expected_total`, `memo`) 
 	VALUES(:p1a1, :p1a2, :p1change, :type, :a1total, :memo), 
 			(:p2a1, :p2a2, :p2change, :type, :a2total, :memo)";
