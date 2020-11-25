@@ -86,8 +86,8 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $a2total = (int)$result["total"];
 
-    $a1total -= $amount;
-    $a2total += $amount;
+    $a1total += $amount;
+    $a2total -= $amount;
 
     $query = "INSERT INTO `Transactions` (`act_src_id`, `act_dest_id`, `amount`, `action_type`, `expected_total`, `memo`) 
 	VALUES(:p1a1, :p1a2, :p1change, :type, :a1total, :memo), 
@@ -109,6 +109,23 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $result = $stmt->execute();
     //echo var_export($result, true);
     //echo var_export($stmt->errorInfo(), true);
-    return $result;
+
+    $stmt = $db->prepare("SELECT ifnull(sum(amount),0) as total from Transactions where act_src_id = :id");
+    $stmt->execute([":id" => $source]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $a1total = (int)$result["total"];
+
+    $stmt = $db->prepare("SELECT ifnull(sum(amount),0) as total from Transactions where act_src_id = :id");
+    $stmt->execute([":id" => $destination]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $a2total = (int)$result["total"];
+
+    $query2 = $db->prepare("UPDATE Accounts set balance = :b where Accounts.id = :id");
+    $query2->execute([":id" => $source, ":b" => $a1total]);
+
+    $query2 = $db->prepare("UPDATE Accounts set balance = :b where Accounts.id = :id");
+    $query2->execute([":id" => $destination, ":b" => $a2total]);
+
+    //return $result;
 }
 ?>
