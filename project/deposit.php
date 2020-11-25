@@ -59,7 +59,7 @@ if (isset($_POST["save"])) {
     }
 
     if ($r) {
-        flash("Created successfully with id: " . $db->lastInsertId());
+        flash("Deposit Successful");
     }
     else {
         $e = $stmt->errorInfo();

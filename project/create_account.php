@@ -31,16 +31,21 @@ while ($i < 100){
         $balance = $_POST["balance"];
         $user = get_user_id();
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO Accounts (account_number, account_type, 
-    balance, user_id) VALUES(:account_number, :account_type, :balance, :user)");
+        $stmt = $db->prepare("INSERT INTO Accounts (account_number, account_type, user_id) VALUES(:account_number, :account_type, :user)");
         $r = $stmt->execute([
             ":account_number" => $account_number,
             ":account_type" => $account_type,
-            ":balance" => $balance,
             ":user" => $user
         ]);
         if ($r) {
             flash("Created successfully with id: " . $db->lastInsertId());
+            $world_id = 2;
+            $db = getDB();
+            $stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number = '000000000000'");
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $world_id = $result["id"];
+            doTransaction($world_id, $db->lastInsertId(), ($balance * -1), 'deposit', 'new account');
             die(header("Location: list_account.php"));
             break;
         } else {
