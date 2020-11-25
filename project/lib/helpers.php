@@ -120,10 +120,10 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $a2total = (int)$result["total"];
 
-    $query2 = "UPDATE Accounts set balance :b where act_src_id = :id";
+    $query2 = $db->prepare("UPDATE Accounts set balance :b where act_src_id = :id");
     $query2->execute([":id" => $source, ":b" => $a1total]);
 
-    $query2 = "UPDATE Accounts set balance :b where act_src_id = :id";
+    $query2 = $db->prepare("UPDATE Accounts set balance :b where act_src_id = :id");
     $query2->execute([":id" => $destination, ":b" => $a2total]);
 
     //return $result;
