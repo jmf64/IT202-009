@@ -22,6 +22,7 @@ require_once(__DIR__ . "/../lib/helpers.php");
             <li><a href="deposit.php">Deposit</a></li>
             <li><a href="withdraw.php">Withdraw</a></li>
             <li><a href="transfer.php">Transfer</a></li>
+            <li><a href="ext_transfer.php">Exterior Transfer</a></li>
             <li><a href="profile.php">Profile</a></li>
             <li><a href="logout.php">Logout</a></li>
         <?php endif; ?>
