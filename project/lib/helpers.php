@@ -108,7 +108,7 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $stmt->bindValue(":a2total", $a2total);
     $result = $stmt->execute();
     //echo var_export($result, true);
-    echo var_export($stmt->errorInfo(), true);
+    //echo var_export($stmt->errorInfo(), true);
 
     $stmt = $db->prepare("SELECT ifnull(sum(amount),0) as total from Transactions where act_src_id = :id");
     $stmt->execute([":id" => $source]);

@@ -71,9 +71,10 @@ if (isset($_POST["save"])) {
     }
 
     if ($r) {
-        flash("Withdraw Successful");
-    }
-    else {
+        flash("Transfer Successful");
+    } else if (!$isValid) {
+        flash("Insufficient Balance");
+    } else {
         $e = $stmt->errorInfo();
         flash("Error creating: " . var_export($e, true));
     }
