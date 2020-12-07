@@ -56,8 +56,8 @@ if (isset($_POST["save"])) {
     $action_type = 'ext_transfer';
     $memo = $_POST["memo"];
 
-    $stmt = $db->prepare("SELECT balance FROM Accounts WHERE Accounts.id = $act_src_id");
-    $stmt->execute();
+    $stmt = $db->prepare("SELECT balance FROM Accounts WHERE Accounts.id = :act_src_id");
+    $stmt->execute([":act_src_id" => $act_src_id]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $balance = $result["balance"];
     $isValid = true;

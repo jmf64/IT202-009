@@ -44,8 +44,8 @@ if (isset($_POST["save"])) {
     $action_type = 'withdraw';
     $memo = $_POST["memo"];
 
-    $stmt = $db->prepare("SELECT balance FROM Accounts WHERE Accounts.id = $act_id");
-    $stmt->execute();
+    $stmt = $db->prepare("SELECT balance FROM Accounts WHERE Accounts.id = :act_id");
+    $stmt->execute([":act_id" => $act_id]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $balance = $result["balance"];
     $isValid = true;
