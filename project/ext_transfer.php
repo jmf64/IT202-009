@@ -64,8 +64,6 @@ if (isset($_POST["save"])) {
 
     if ($balance < $amount){
         $isValid = false;
-        flash("Insufficient Balance");
-        die();
     }
 
     if (isset($_POST['act_src_id']) && isset($_POST['amount']) && $isValid) {
@@ -85,7 +83,7 @@ if (isset($_POST["save"])) {
         }
     }
 
-    if ($r) {
+    if ($r && $isValid) {
         flash("Transfer Successful");
     } else if (!$isValid) {
         flash("Insufficient Balance");
