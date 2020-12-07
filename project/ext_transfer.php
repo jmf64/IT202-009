@@ -27,9 +27,9 @@ $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach;?>
         </select>
         <label>Destination User Last Name</label>
-        <label type="text" name="dest_user_last_name">
+        <input type="text" name="dest_user_last_name"/>
         <label>Last 4 Digit Account Destination ID</label>
-        <label type="number" name="last_4_act_dest_id">
+        <input type="number" name="last_4_act_dest_id"/>
         <label>Amount</label>
         <input type="number" name="amount" min="5" placeholder="0.00"/>
         <label>Memo</label>
