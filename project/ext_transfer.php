@@ -43,17 +43,11 @@ $dest_accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php
 if (isset($_POST["save"])) {
     //TODO add proper validation/checks
-    $world_id = 2;
-    $db = getDB();
-    $stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number = '000000000000'");
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $world_id = $result["id"];
 
     $act_src_id = $_POST["act_src_id"];
     $act_dest_id = $_POST["act_dest_id"];
     $amount = $_POST["amount"];
-    $action_type = 'ext_transfer';
+    $action_type = 'ext_trans';
     $memo = $_POST["memo"];
 
     $stmt = $db->prepare("SELECT balance FROM Accounts WHERE Accounts.id = :act_src_id");
@@ -77,7 +71,7 @@ if (isset($_POST["save"])) {
             //case 'transfer':
             //    doTransaction($act_src_id, $act_dest_id, ($amount * -1), $action_type, $memo);
             //    break;
-            case 'ext_transfer':
+            case 'ext_trans':
                 doTransaction($act_src_id, $act_dest_id, ($amount * -1), $action_type, $memo);
                 break;
         }

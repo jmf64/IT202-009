@@ -43,12 +43,6 @@ $dest_accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php
 if (isset($_POST["save"])) {
     //TODO add proper validation/checks
-    $world_id = 2;
-    $db = getDB();
-    $stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number = '000000000000'");
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $world_id = $result["id"];
 
     $act_src_id = $_POST["act_src_id"];
     $act_dest_id = $_POST["act_dest_id"];
