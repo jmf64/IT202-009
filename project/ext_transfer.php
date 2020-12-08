@@ -12,9 +12,9 @@ $stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE Accounts.use
 $r = $stmt->execute([":user_id" => $user_id]);
 $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-//$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE Accounts.user_id = :user_id LIMIT 25");
-//$r = $stmt->execute();
-//$dest_accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE account_number != '000000000000' LIMIT 25");
+$r = $stmt->execute();
+$dest_accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
     <h3>Create Transaction</h3>
@@ -26,10 +26,13 @@ $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 ><?php safer_echo($account["account_number"]); ?></option>
             <?php endforeach;?>
         </select>
-        <label>Destination User Last Name</label>
-        <input type="text" name="dest_user_last_name"/>
-        <label>Last 4 Digit Account Destination ID</label>
-        <input type="number" name="last_4_act_dest_id"/>
+        <label>Account Destination ID</label>
+        <select name="act_dest_id">
+            <?php foreach ($dest_accounts as $account): ?>
+                <option value="<?php safer_echo($account["id"]); ?>"
+                ><?php safer_echo($account["account_number"]); ?></option>
+            <?php endforeach;?>
+        </select>
         <label>Amount</label>
         <input type="number" name="amount" min="5" placeholder="0.00"/>
         <label>Memo</label>
@@ -48,10 +51,7 @@ if (isset($_POST["save"])) {
     $world_id = $result["id"];
 
     $act_src_id = $_POST["act_src_id"];
-    //$stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number LIKE last_4_act_dest_id");
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $act_dest_id = $result["id"];
+    $act_dest_id = $_POST["act_dest_id"];
     $amount = $_POST["amount"];
     $action_type = 'ext_transfer';
     $memo = $_POST["memo"];
