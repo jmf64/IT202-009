@@ -134,6 +134,4 @@ WHERE action_type = :action_type AND created BETWEEN :start_date AND :end_date")
     </nav>
     </div>
 </div>
-
-
 <?php require(__DIR__ . "/partials/flash.php");
