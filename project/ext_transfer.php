@@ -26,13 +26,10 @@ $dest_accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 ><?php safer_echo($account["account_number"]); ?></option>
             <?php endforeach;?>
         </select>
-        <label>Account Destination ID</label>
-        <select name="act_dest_id">
-            <?php foreach ($dest_accounts as $account): ?>
-                <option value="<?php safer_echo($account["id"]); ?>"
-                ><?php safer_echo($account["account_number"]); ?></option>
-            <?php endforeach;?>
-        </select>
+        <label>Account Destination ID Last 4</label>
+        <input type="text" name="act_dest_id_last_4"/>
+        <label>Last Name</label>
+        <input type="text" name="last_name"/>
         <label>Amount</label>
         <input type="number" name="amount" min="5" placeholder="0.00"/>
         <label>Memo</label>
@@ -43,9 +40,13 @@ $dest_accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php
 if (isset($_POST["save"])) {
     //TODO add proper validation/checks
-
+    $last_name = $_POST["last_name"];
+    $last_4 = $_POST["last_4"];
     $act_src_id = $_POST["act_src_id"];
-    $act_dest_id = $_POST["act_dest_id"];
+    $stmt = $db->prepare("SELECT * FROM Users u JOIN Accounts a on u.id = a.user_id WHERE u.last_name = :last_name AND 
+a.account_number LIKE :last_4");
+    $r = $stmt->execute([":last_name" => $last_name, ":last_4" => $last_4]);
+    $act_dest_id = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $amount = $_POST["amount"];
     $action_type = 'ext_trans';
     $memo = $_POST["memo"];
