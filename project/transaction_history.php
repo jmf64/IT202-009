@@ -43,9 +43,8 @@ if(isset($account_id)) {
     $stmt = $db->prepare("SELECT amount, action_type, memo, created FROM Transactions WHERE act_src_id = :account_id LIMIT :offset, :count");
     $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
     $stmt->bindValue(":count", $per_page, PDO::PARAM_INT);
-    $stmt->execute();
-    $e = $stmt->errorInfo();
     $r = $stmt->execute(["account_id" => $account_id]);
+    $e = $stmt->errorInfo();
     if ($r) {
         $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } else {
@@ -89,7 +88,7 @@ WHERE action_type = :action_type AND created BETWEEN :start_date AND :end_date")
         <input type="text" name="start"/>
         <label>End Date (YYYY-MM-DD HH:MM:SS) </label>
         <input type="text" name="end"/>
-        <input type="submit" name="filter" value="Create"/>
+        <input type="submit" name="filter" value="Filter"/>
     </form>
 <div class="results">
     <?php if (count($transactions) > 0): ?>
