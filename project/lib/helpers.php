@@ -77,14 +77,22 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $db = getDb();
 
     $stmt = $db->prepare("SELECT ifnull(sum(amount),0) as total from Transactions where act_src_id = :id");
-    $stmt->execute([":id" => $source]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $a1total = (int)$result["total"];
+    $r = $stmt->execute([":id" => $source]);
+    if ($r){
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $a1total = (int)$result["total"];
+    } else {
+        flash("Error in source 1" . var_export($stmt->errorInfo(), true));
+    }
 
     $stmt = $db->prepare("SELECT ifnull(sum(amount),0) as total from Transactions where act_src_id = :id");
-    $stmt->execute([":id" => $destination]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $a2total = (int)$result["total"];
+    $r = $stmt->execute([":id" => $destination]);
+    if ($r){
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $a2total = (int)$result["total"];
+    } else {
+        flash("Error in source 2" . var_export($stmt->errorInfo(), true));
+    }
 
     $a1total += $amount;
     $a2total -= $amount;
@@ -111,14 +119,22 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     //echo var_export($stmt->errorInfo(), true);
 
     $stmt = $db->prepare("SELECT ifnull(sum(amount),0) as total from Transactions where act_src_id = :id");
-    $stmt->execute([":id" => $source]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $a1total = (int)$result["total"];
+    $r = $stmt->execute([":id" => $source]);
+    if ($r){
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $a1total = (int)$result["total"];
+    } else {
+        flash("Error in source 1 after balance updates " . var_export($stmt->errorInfo(), true));
+    }
 
     $stmt = $db->prepare("SELECT ifnull(sum(amount),0) as total from Transactions where act_src_id = :id");
-    $stmt->execute([":id" => $destination]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $a2total = (int)$result["total"];
+    $r = $stmt->execute([":id" => $destination]);
+    if ($r){
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $a2total = (int)$result["total"];
+    } else {
+        flash("Error in source 2 after balance updates " . var_export($stmt->errorInfo(), true));
+    }
 
     $query2 = $db->prepare("UPDATE Accounts set balance = :b where Accounts.id = :id");
     $query2->execute([":id" => $source, ":b" => $a1total]);
@@ -127,37 +143,5 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $query2->execute([":id" => $destination, ":b" => $a2total]);
 
     //return $result;
-}
-
-/**
- * @param $query must have a column called "total"
- * @param array $params
- * @param int $per_page
- */
-function paginate($query, $params = [], $per_page = 10) {
-    global $page;
-    if (isset($_GET["page"])) {
-        try {
-            $page = (int)$_GET["page"];
-        }
-        catch (Exception $e) {
-            $page = 1;
-        }
-    }
-    else {
-        $page = 1;
-    }
-    $db = getDB();
-    $stmt = $db->prepare($query);
-    $stmt->execute($params);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $total = 0;
-    if ($result) {
-        $total = (int)$result["total"];
-    }
-    global $total_pages;
-    $total_pages = ceil($total / $per_page);
-    global $offset;
-    $offset = ($page - 1) * $per_page;
 }
 ?>
