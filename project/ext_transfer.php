@@ -27,7 +27,7 @@ $dest_accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach;?>
         </select>
         <label>Account Destination ID Last 4</label>
-        <input type="text" name="act_dest_id_last_4"/>
+        <input type="text" name="last_4"/>
         <label>Last Name</label>
         <input type="text" name="last_name"/>
         <label>Amount</label>
