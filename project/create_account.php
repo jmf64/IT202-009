@@ -17,7 +17,7 @@ if (!is_logged_in()) {
             <option value="loan"> Loan</option>
         </select>
         <label>Balance</label>
-        <input type="number" name="balance"/>
+        <input type="number" name="balance" min="5"/>
         <input type="submit" name="save" value="Create"/>
     </form>
 
