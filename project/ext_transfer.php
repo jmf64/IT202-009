@@ -48,7 +48,7 @@ a.account_number LIKE :last_4 LIMIT 1");
     $r = $stmt->execute([":last_name" => $last_name, ":last_4" => $last_4]);
     if ($r){
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $act_dest_id = $result["account_id"];
+        $act_dest_id = $result["id"];
     } else {
         $e = $stmt->errorInfo();
         flash("There was an error fetching source account " . var_export($e, true));
