@@ -46,7 +46,12 @@ if (isset($_POST["save"])) {
     $stmt = $db->prepare("SELECT * FROM Users u JOIN Accounts a on u.id = a.user_id WHERE u.last_name = :last_name AND 
 a.account_number LIKE :last_4 LIMIT 1");
     $r = $stmt->execute([":last_name" => $last_name, ":last_4" => $last_4]);
-    $act_dest_id = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($r){
+        $act_dest_id = $stmt->fetch(PDO::FETCH_ASSOC);
+    } else {
+        $e = $stmt->errorInfo();
+        flash("There was an error fetching source account " . var_export($e, true));
+    }
     $amount = $_POST["amount"];
     $action_type = 'ext_trans';
     $memo = $_POST["memo"];
