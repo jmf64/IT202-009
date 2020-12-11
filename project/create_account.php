@@ -17,7 +17,7 @@ if (!is_logged_in()) {
             <option value="loan"> Loan</option>
         </select>
         <label>Balance</label>
-        <input type="number" name="balance"/>
+        <input type="number" name="balance" min="5"/>
         <input type="submit" name="save" value="Create"/>
     </form>
 
@@ -38,14 +38,15 @@ while ($i < 100){
             ":user" => $user
         ]);
         if ($r) {
-            flash("Created successfully with id: " . $db->lastInsertId());
+            $new_id = $db->lastInsertId();
+            flash("Created successfully with id: " . $new_id);
             $world_id = 2;
             $db = getDB();
             $stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number = '000000000000'");
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             $world_id = $result["id"];
-            doTransaction($world_id, $db->lastInsertId(), ($balance * -1), 'deposit', 'new account');
+            doTransaction($world_id, $new_id, ($balance * -1), 'deposit', 'new account');
             die(header("Location: list_account.php"));
             break;
         } else {

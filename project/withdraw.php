@@ -44,7 +44,17 @@ if (isset($_POST["save"])) {
     $action_type = 'withdraw';
     $memo = $_POST["memo"];
 
-    if (isset($_POST['act_id']) && isset($_POST['amount'])) {
+    $stmt = $db->prepare("SELECT balance FROM Accounts WHERE Accounts.id = :act_id");
+    $stmt->execute([":act_id" => $act_id]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $balance = $result["balance"];
+    $isValid = true;
+
+    if ($balance < $amount){
+        $isValid = false;
+    }
+
+    if (isset($_POST['act_id']) && isset($_POST['amount']) && $isValid) {
         switch ($action_type) {
             //case 'deposit':
             //    doTransaction($world_id, $act_id, ($amount * -1), $action_type, $memo);
@@ -58,10 +68,11 @@ if (isset($_POST["save"])) {
         }
     }
 
-    if ($r) {
-        flash("Withdraw Successful");
-    }
-    else {
+    if ($r && $isValid) {
+        flash("Transfer Successful");
+    } else if (!$isValid) {
+        flash("Insufficient Balance");
+    } else {
         $e = $stmt->errorInfo();
         flash("Error creating: " . var_export($e, true));
     }
