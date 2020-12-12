@@ -31,9 +31,6 @@ if (isset($_POST["search"])) {
 
 ?>
     <h3>Account</h3>
-    <form method="POST">
-        <input type="submit" value="Search" name="search"/>
-    </form>
     <div class="results">
         <?php if (count($results) > 0): ?>
             <div class="list-group">

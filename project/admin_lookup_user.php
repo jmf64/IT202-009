@@ -35,9 +35,6 @@ from Users WHERE first_name = :first_name AND last_name = :last_name");
 
 ?>
     <h3>User Info</h3>
-    <form method="POST">
-        <input type="submit" value="Search" name="search"/>
-    </form>
     <div class="results">
         <?php if (count($results) > 0): ?>
             <div class="list-group">
