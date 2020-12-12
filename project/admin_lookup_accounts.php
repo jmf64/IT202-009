@@ -14,9 +14,9 @@ if (!has_role("Admin")) {
 
 <?php
 $results = [];
-$account_number = $_POST["account_number"];
 
 if (isset($_POST["search"])) {
+    $account_number = $_POST["account_number"];
     $db = getDB();
     $stmt = $db->prepare("SELECT id, account_number, user_id, account_type, opened_date, last_updated, balance,
     apy, nextApy, active from Accounts WHERE account_number = :account_number");

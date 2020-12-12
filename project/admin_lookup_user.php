@@ -17,10 +17,10 @@ if (!has_role("Admin")) {
 
 <?php
 $results = [];
-$first_name = $_POST["first_name"];
-$last_name = $_POST["last_name"];
 
 if (isset($_POST["search"])) {
+    $first_name = $_POST["first_name"];
+    $last_name = $_POST["last_name"];
     $db = getDB();
     $stmt = $db->prepare("SELECT id, email, created, username, first_name, last_name, privacy 
 from Users WHERE first_name = :first_name AND last_name = :last_name");
