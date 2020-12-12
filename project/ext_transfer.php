@@ -8,13 +8,9 @@ if (!is_logged_in()) {
 
 $user_id = get_user_id();
 $db = getDB();
-$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE Accounts.user_id = :user_id LIMIT 25");
+$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE Accounts.user_id = :user_id AND active = 1 LIMIT 25");
 $r = $stmt->execute([":user_id" => $user_id]);
 $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE account_number != '000000000000' LIMIT 25");
-$r = $stmt->execute();
-$dest_accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
     <h3>Create Transaction</h3>

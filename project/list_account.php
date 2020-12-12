@@ -12,7 +12,7 @@ $results = [];
 if (isset($_POST["search"])) {
     $db = getDB();
     $stmt = $db->prepare("SELECT id, account_number, account_type, balance, apy, user_id 
-from Accounts WHERE Accounts.user_id = :user_id LIMIT 5");
+from Accounts WHERE Accounts.user_id = :user_id AND active = 1 LIMIT 5");
     $r = $stmt->execute([":user_id" => $user_id]);
     if ($r) {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
