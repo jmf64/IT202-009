@@ -20,7 +20,7 @@ if (isset($_POST["search"])) {
     $account_number = $_POST["account_number"];
     $db = getDB();
     $stmt = $db->prepare("SELECT id, account_number, user_id, account_type, opened_date, last_updated, balance,
-    apy, nextApy, active from Accounts WHERE account_number = :account_number");
+    apy, nextAPY, active from Accounts WHERE account_number = :account_number");
     $r = $stmt->execute([":account_number" => $account_number]);
     if ($r) {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
