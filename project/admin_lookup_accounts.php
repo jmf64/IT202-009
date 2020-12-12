@@ -83,7 +83,6 @@ if (isset($_POST["search"])) {
                             <a type="button" href="admin_transaction_history.php?id=<?php safer_echo($r['id']);?>">View Transaction History</a>
                             <a type="button" href="admin_freeze.php?id=<?php safer_echo($r['id']);?>">Freeze This Account</a>
                         </div>
-
                     </div>
                 <?php endforeach; ?>
             </div>
