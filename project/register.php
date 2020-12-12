@@ -28,7 +28,7 @@ if (isset($_POST["register"])) {
         $last_name = $_POST["last_name"];
     }
     if (isset($_POST["privacy"])) {
-        $email = $_POST["privacy"];
+        $privacy = $_POST["privacy"];
     }
     $isValid = true;
     //check if passwords match on the server side
@@ -87,7 +87,7 @@ if (!isset($last_name)) {
     $last_name = "";
 }
 if (!isset($privacy)) {
-    $privacy = "Public";
+    $privacy = "";
 }
 ?>
     <form method="POST">

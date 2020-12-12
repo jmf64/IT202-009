@@ -8,13 +8,8 @@ if (!is_logged_in()) {
 
 $user_id = get_user_id();
 $results = [];
-/*
-$query = "";
-if (isset($_POST["query"])) {
-    $query = $_POST["query"];
-}
-*/
-if (isset($_POST["search"])){// && !empty($query)) {
+
+if (isset($_POST["search"])) {
     $db = getDB();
     $stmt = $db->prepare("SELECT id, account_number, account_type, balance, apy, user_id 
 from Accounts WHERE Accounts.user_id = :user_id LIMIT 5");
@@ -30,7 +25,6 @@ from Accounts WHERE Accounts.user_id = :user_id LIMIT 5");
 ?>
 <h3>List Accounts</h3>
 <form method="POST">
-    <!input name="query" placeholder="Search" value="<?//php safer_echo($query); ?>"/>
     <input type="submit" value="Search" name="search"/>
 </form>
 <div class="results">
