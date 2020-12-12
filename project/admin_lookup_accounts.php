@@ -10,6 +10,7 @@ if (!has_role("Admin")) {
     <form method="POST">
         <label>Account Number</label>
         <input type="text" name="account_number"/>
+        <input type="submit" name="search" value="Search"/>
     </form>
 
 <?php
