@@ -18,6 +18,7 @@ if (!is_logged_in()) {
         </select>
         <label>Balance</label>
         <input type="number" name="balance" min="5"/>
+        <label>APY: Checking = 0%, Savings = 1%, Loan = 10%</label>
         <input type="submit" name="save" value="Create"/>
     </form>
 
@@ -28,14 +29,21 @@ while ($i < 100){
         //TODO add proper validation/checks
         $account_number = (string)rand(100000000000, 999999999999);
         $account_type = $_POST["account_type"];
+        $apy = 0;
+        if ($account_type == "savings") {
+            $apy = .01;
+        } else if ($account_type == "loan"){
+            $apy = .1;
+        }
         $balance = $_POST["balance"];
         $user = get_user_id();
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO Accounts (account_number, account_type, user_id) VALUES(:account_number, :account_type, :user)");
+        $stmt = $db->prepare("INSERT INTO Accounts (account_number, account_type, user_id, apy) VALUES(:account_number, :account_type, :user, :apy)");
         $r = $stmt->execute([
             ":account_number" => $account_number,
             ":account_type" => $account_type,
-            ":user" => $user
+            ":user" => $user,
+            ":apy" => $apy
         ]);
         if ($r) {
             $new_id = $db->lastInsertId();
