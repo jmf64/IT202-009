@@ -14,7 +14,7 @@ if(isset($_GET["id"])){
 $db = getDB();
 
 if(isset($account_id)) {
-    $stmt = $db->prepare("UPDATE Accounts SET active = 0 WHERE id = :account_id");
+    $stmt = $db->prepare("UPDATE Accounts SET active = 1 WHERE id = :account_id");
     $r = $stmt->execute([":account_id" => $account_id]);
     if ($r) {
         flash("Account Successfully Frozen");
