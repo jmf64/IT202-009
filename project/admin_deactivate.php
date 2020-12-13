@@ -14,7 +14,7 @@ if(isset($_GET["id"])){
 $db = getDB();
 
 if(isset($user_id)) {
-    $stmt = $db->prepare("UPDATE Users SET active = 0 WHERE id = :user_id");
+    $stmt = $db->prepare("UPDATE Users SET active = 1 WHERE id = :user_id");
     $r = $stmt->execute([":user_id" => $user_id]);
     if ($r) {
         flash("User Successfully Deactivated");
