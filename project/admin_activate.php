@@ -17,10 +17,10 @@ if(isset($user_id)) {
     $stmt = $db->prepare("UPDATE Users SET active = 1 WHERE id = :user_id");
     $r = $stmt->execute([":user_id" => $user_id]);
     if ($r) {
-        flash("User Successfully Deactivated");
+        flash("User Successfully Activated");
     } else {
         $e = $stmt->errorInfo();
-        flash("There was an error deactivating this user " . var_export($e, true));
+        flash("There was an error activating this user " . var_export($e, true));
     }
 }
 ?>

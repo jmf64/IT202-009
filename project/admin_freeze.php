@@ -20,7 +20,7 @@ if(isset($account_id)) {
         flash("Account Successfully Frozen");
     } else {
         $e = $stmt->errorInfo();
-        flash("There was an error fetching freezing this account " . var_export($e, true));
+        flash("There was an error freezing this account " . var_export($e, true));
     }
 }
 ?>

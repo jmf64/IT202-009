@@ -17,10 +17,10 @@ if(isset($account_id)) {
     $stmt = $db->prepare("UPDATE Accounts SET frozen = 0 WHERE id = :account_id");
     $r = $stmt->execute([":account_id" => $account_id]);
     if ($r) {
-        flash("Account Successfully Frozen");
+        flash("Account Successfully Unfrozen");
     } else {
         $e = $stmt->errorInfo();
-        flash("There was an error fetching freezing this account " . var_export($e, true));
+        flash("There was an error unfreezing this account " . var_export($e, true));
     }
 }
 ?>
