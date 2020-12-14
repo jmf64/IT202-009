@@ -171,7 +171,7 @@ function calcAPY(){
                 //last column added supports $memo which my example in the link above doesn't support
                 doTransaction($world_id, $account["id"], ($change * -1), "interest", "APY Calc");
 
-                $stmt = $db->prepare("UPDATE Accounts set balance = (SELECT IFNULL(SUM(expected_total),0) FROM Transactions WHERE act_src_id = :id), nextAPY = TIMESTAMPADD(MONTH,:months,current_timestamp) WHERE id = :id");
+                $stmt = $db->prepare("UPDATE Accounts set balance = (SELECT IFNULL(SUM(balance),0) FROM Transactions WHERE act_src_id = :id), nextAPY = TIMESTAMPADD(MONTH,:months,current_timestamp) WHERE id = :id");
                 $r = $stmt->execute([":id"=>$account["id"], ":months"=>$numOfMonths]);
                 if(!$r){
                     flash(var_export($stmt->errorInfo(), true), "danger");
