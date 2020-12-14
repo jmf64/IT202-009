@@ -67,7 +67,7 @@ if (isset($_POST["search"])) {
                             <div><?php safer_echo($r["balance"]); ?></div>
                         </div>
                         <div>
-                            <div>APY:</div>
+                            <div>APY %:</div>
                             <div><?php safer_echo($r["apy"]); ?></div>
                         </div>
                         <div>
