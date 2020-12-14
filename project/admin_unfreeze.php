@@ -8,19 +8,19 @@ if (!has_role("Admin")) {
 }
 
 if(isset($_GET["id"])){
-    $user_id = $_GET["id"];
+    $account_id = $_GET["id"];
 }
 
 $db = getDB();
 
-if(isset($user_id)) {
-    $stmt = $db->prepare("UPDATE Users SET active = 0 WHERE id = :user_id");
-    $r = $stmt->execute([":user_id" => $user_id]);
+if(isset($account_id)) {
+    $stmt = $db->prepare("UPDATE Accounts SET frozen = 0 WHERE id = :account_id");
+    $r = $stmt->execute([":account_id" => $account_id]);
     if ($r) {
-        flash("User Successfully Deactivated");
+        flash("Account Successfully Frozen");
     } else {
         $e = $stmt->errorInfo();
-        flash("There was an error deactivating this user " . var_export($e, true));
+        flash("There was an error fetching freezing this account " . var_export($e, true));
     }
 }
 ?>

@@ -145,12 +145,11 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     //return $result;
 }
 
-//sample APY the right away (this function would go in helpers.php)
 //assumed Accounts table has an apy column for the rate and nextAPY timestamp column
 function calcAPY(){
     $db = getDB();
     $numOfMonths = 1;//1 for monthly
-    $stmt = $db->prepare("SELECT id, apy, balance FROM Accounts WHERE account_type != 'checking' AND IFNULL(nextAPY, TIMESTAMPADD(MONTH,:months,opened_date)) <= current_timestamp");
+    $stmt = $db->prepare("SELECT id, apy, balance FROM Accounts WHERE (account_type != 'checking' OR account_type != 'World') AND IFNULL(nextAPY, TIMESTAMPADD(MONTH,:months,opened_date)) <= current_timestamp");
     $r = $stmt->execute([":months"=>$numOfMonths]);
     if($r){
         $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -172,7 +171,7 @@ function calcAPY(){
                 //last column added supports $memo which my example in the link above doesn't support
                 doTransaction($world_id, $account["id"], ($change * -1), "interest", "APY Calc");
 
-                $stmt = $db->prepare("UPDATE Accounts set balance = (SELECT IFNULL(SUM(amount_change),0) FROM Transactions WHERE act_src_id = :id), nextAPY = TIMESTAMPADD(MONTH,:months,current_timestamp) WHERE id = :id");
+                $stmt = $db->prepare("UPDATE Accounts set balance = (SELECT IFNULL(SUM(expected_total),0) FROM Transactions WHERE act_src_id = :id), nextAPY = TIMESTAMPADD(MONTH,:months,current_timestamp) WHERE id = :id");
                 $r = $stmt->execute([":id"=>$account["id"], ":months"=>$numOfMonths]);
                 if(!$r){
                     flash(var_export($stmt->errorInfo(), true), "danger");

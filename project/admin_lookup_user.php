@@ -69,6 +69,7 @@ from Users WHERE first_name = :first_name AND last_name = :last_name");
                             <div><?php safer_echo($r["privacy"]); ?></div>
                         </div>
                             <a type="button" href="admin_deactivate.php?id=<?php safer_echo($r['id']);?>">Deactivate This User</a>
+                            <a type="button" href="admin_activate.php?id=<?php safer_echo($r['id']);?>">Activate This User</a>
                         </div>
                     </div>
                 <?php endforeach; ?>

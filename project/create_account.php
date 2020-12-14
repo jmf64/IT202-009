@@ -29,11 +29,11 @@ while ($i < 100){
         //TODO add proper validation/checks
         $account_number = (string)rand(100000000000, 999999999999);
         $account_type = $_POST["account_type"];
-        $apy = 0;
+        $apy = 1;
         if ($account_type == "savings") {
-            $apy = .01;
+            $apy = 1.01;
         } else if ($account_type == "loan"){
-            $apy = .1;
+            $apy = 1.1;
         }
         $balance = $_POST["balance"];
         $user = get_user_id();

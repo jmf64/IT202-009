@@ -80,6 +80,7 @@ if (isset($_POST["search"])) {
                         </div>
                             <a type="button" href="admin_transaction_history.php?id=<?php safer_echo($r['id']);?>">View Transaction History</a>
                             <a type="button" href="admin_freeze.php?id=<?php safer_echo($r['id']);?>">Freeze This Account</a>
+                            <a type="button" href="admin_unfreeze.php?id=<?php safer_echo($r['id']);?>">Unfreeze This Account</a>
                         </div>
                     </div>
                 <?php endforeach; ?>
