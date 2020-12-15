@@ -12,10 +12,9 @@ $stmt = $db->prepare("SELECT id, email, created, username, first_name, last_name
 from Users WHERE id = :user_id");
 $r = $stmt->execute([":user_id" => $user_id]);
 if ($r) {
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $results = $stmt->fetch(PDO::FETCH_ASSOC);
 } else {
     flash("There was a problem fetching the results");
-    flash(var_export($stmt->errorInfo(), true), "danger");
 }
 
 if (strtolower($results["privacy"]) == "private" && $user_id != get_user_id()){
@@ -28,7 +27,7 @@ if (strtolower($results["privacy"]) == "public" && $user_id != get_user_id()){
 }
 
 ?>
-    <h3>Profile Info</h3>
+    <h3>Profile</h3>
     <div class="results">
 <?php if (count($results) > 0): ?>
     <div class="list-group">
@@ -65,10 +64,6 @@ if (strtolower($results["privacy"]) == "public" && $user_id != get_user_id()){
         </div>
     <?php endforeach; ?>
     </div>
-<?php else: ?>
-    <p>No results</p>
 <?php endif; ?>
     </div>
 <?php require(__DIR__ . "/partials/flash.php");
-
-
