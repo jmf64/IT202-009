@@ -54,6 +54,7 @@ from Accounts WHERE Accounts.user_id = :user_id AND active = 1 LIMIT 5");
                     </div>
                     <div>
                         <a type="button" href="transaction_history.php?id=<?php safer_echo($r['id']);?>">View Transaction History</a>
+                        <a type="button" href="delete_account.php?id=<?php safer_echo($r['id']);?>">Delete This Account</a>
                     </div>
                 </div>
             <?php endforeach; ?>
