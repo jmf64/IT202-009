@@ -17,13 +17,13 @@ if ($r) {
     flash("There was a problem fetching the results");
 }
 
-if (strtolower($r["privacy"]) == "private" && $user_id != get_user_id()){
+if (strtolower($results["privacy"]) == "private" && $user_id != get_user_id()){
     flash("You don't have permission to access this page");
     die(header("Location: home.php"));
 }
 
-if (strtolower($r["privacy"]) == "public" && $user_id != get_user_id()){
-    $r["email"] = "**********";
+if (strtolower($results["privacy"]) == "public" && $user_id != get_user_id()){
+    $results["email"] = "**********";
 }
 
 ?>
