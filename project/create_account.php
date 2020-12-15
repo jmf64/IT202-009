@@ -47,7 +47,7 @@ while ($i < 100){
         ]);
         if ($r) {
             $new_id = $db->lastInsertId();
-            flash("Created successfully with id: " . $new_id);
+            flash("Account created successfully with number ") . $account_number;
             $world_id = 2;
             $db = getDB();
             $stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number = '000000000000'");

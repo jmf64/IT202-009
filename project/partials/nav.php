@@ -2,6 +2,7 @@
 <?php
 //we'll be including this on most/all pages so it's a good place to include anything else we want on those pages
 require_once(__DIR__ . "/../lib/helpers.php");
+$user_id = get_user_id();
 ?>
 <nav>
     <ul class="nav">
@@ -11,10 +12,6 @@ require_once(__DIR__ . "/../lib/helpers.php");
             <li><a href="register.php">Register</a></li>
         <?php endif; ?>
         <?php if (has_role("Admin")): ?>
-            <li><a href="test_create_account.php">Create Account Admin</a></li>
-            <li><a href="test_list_account.php">List Account Admin</a></li>
-            <li><a href="test_create_transaction.php">Create Transaction Admin</a></li>
-            <li><a href="test_list_transaction.php">List Transaction Admin</a></li>
             <li><a href="admin_lookup_user.php">Admin Lookup User</a></li>
             <li><a href="admin_lookup_accounts.php">Admin Lookup Account</a></li>
         <?php endif; ?>
@@ -25,7 +22,8 @@ require_once(__DIR__ . "/../lib/helpers.php");
             <li><a href="withdraw.php">Withdraw</a></li>
             <li><a href="transfer.php">Transfer</a></li>
             <li><a href="ext_transfer.php">Exterior Transfer</a></li>
-            <li><a href="profile.php">Profile</a></li>
+            <li><a href="profile.php">Edit Profile</a></li>
+            <li><a href="view_profile.php?id=<?php safer_echo($user_id);?>">View Profile</a></li>
             <li><a href="logout.php">Logout</a></li>
         <?php endif; ?>
     </ul>
