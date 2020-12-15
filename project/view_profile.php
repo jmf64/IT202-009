@@ -15,7 +15,7 @@ if ($r) {
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
     flash("There was a problem fetching the results");
-    $stmt->errorInfo();
+    flash(var_export($stmt->errorInfo(), true), "danger");
 }
 
 if (strtolower($results["privacy"]) == "private" && $user_id != get_user_id()){
