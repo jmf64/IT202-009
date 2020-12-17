@@ -14,11 +14,9 @@ if (!is_logged_in()) {
         <select name="account_type">
             <option value="checking"> Checking</option>
             <option value="savings"> Savings</option>
-            <option value="loan"> Loan</option>
         </select>
         <label>Balance</label>
         <input type="number" name="balance" min="5"/>
-        <label>APY: Checking = 0%, Savings = 1%, Loan = 10%</label>
         <input type="submit" name="save" value="Create"/>
     </form>
 
@@ -32,8 +30,6 @@ while ($i < 100){
         $apy = 0;
         if ($account_type == "savings") {
             $apy = .01;
-        } else if ($account_type == "loan"){
-            $apy = .1;
         }
         $balance = $_POST["balance"];
         $user = get_user_id();

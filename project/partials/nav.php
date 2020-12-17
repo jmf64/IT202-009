@@ -17,6 +17,7 @@ $user_id = get_user_id();
         <?php endif; ?>
         <?php if (is_logged_in()): ?>
             <li><a href="create_account.php">Create Account</a></li>
+            <li><a href="loan.php">Take Loan</a></li>
             <li><a href="list_account.php">List Account</a></li>
             <li><a href="deposit.php">Deposit</a></li>
             <li><a href="withdraw.php">Withdraw</a></li>

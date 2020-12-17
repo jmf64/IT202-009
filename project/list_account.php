@@ -42,7 +42,7 @@ from Accounts WHERE Accounts.user_id = :user_id AND active = 1 LIMIT 5");
                     </div>
                     <div>
                         <div>Balance:</div>
-                        <div><?php safer_echo($r["balance"]); ?></div>
+                        <div><?php safer_echo(abs($r["balance"])); ?></div>
                     </div>
                     <div>
                         <div>APY:</div>
