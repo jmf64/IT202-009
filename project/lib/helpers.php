@@ -149,7 +149,7 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
 function calcAPY(){
     $db = getDB();
     $numOfMonths = 1;//1 for monthly
-    $stmt = $db->prepare("SELECT id, apy, balance FROM Accounts WHERE (account_type != 'checking' AND account_type != 'World') AND IFNULL(nextAPY, TIMESTAMPADD(MONTH,:months,opened_date)) <= current_timestamp");
+    $stmt = $db->prepare("SELECT id, apy, IFNULL(balance,0) FROM Accounts WHERE (account_type != 'checking' AND account_type != 'World') AND IFNULL(nextAPY, TIMESTAMPADD(MONTH,:months,opened_date)) <= current_timestamp");
     $r = $stmt->execute([":months"=>$numOfMonths]);
     if($r){
         $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
