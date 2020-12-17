@@ -43,7 +43,7 @@ while ($i < 100){
         ]);
         if ($r) {
             $new_id = $db->lastInsertId();
-            flash("Account created successfully with number ") . $account_number;
+            flash("Account Created Successfully");
             $world_id = 2;
             $db = getDB();
             $stmt = $db->prepare("SELECT id FROM Accounts WHERE account_number = '000000000000'");
@@ -54,6 +54,7 @@ while ($i < 100){
             die(header("Location: list_account.php"));
             break;
         } else {
+            flash("There was an error creating the account");
             $e = $stmt->errorInfo();
             //flash("Error creating: " . var_export($e, true));
         }

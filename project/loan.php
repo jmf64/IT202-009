@@ -9,7 +9,8 @@ if (!is_logged_in()) {
 
 $user_id = get_user_id();
 $db = getDB();
-$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE Accounts.user_id = :user_id AND frozen = 0 AND active = 1 LIMIT 25");
+$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE Accounts.user_id = :user_id AND frozen = 0 
+AND active = 1 AND account_type != 'loan' LIMIT 25");
 $r = $stmt->execute([":user_id" => $user_id]);
 $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -48,11 +49,12 @@ while ($i < 100){
         ]);
         if ($r) {
             $new_id = $db->lastInsertId();
-            flash("Loan created successfully with number ") . $account_number;
+            flash("Loan created successfully");
             doTransaction($new_id, $act_dest_id, ($balance * -1), 'L deposit', 'new loan');
             die(header("Location: list_account.php"));
             break;
         } else {
+            flash("There was an error taking the loan");
             $e = $stmt->errorInfo();
             //flash("Error creating: " . var_export($e, true));
         }
