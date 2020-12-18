@@ -165,8 +165,8 @@ function calcAPY(){
                 //if monthly divide accordingly
                 $apy /= 12;
                 $balance = (float)$account["balance"];
-                flash(var_export($balance, true));
                 $change = $balance * $apy;
+                flash(var_export($change, true));
                 doTransaction($world_id, $account["id"], ($change * -1), "interest", "APY Calc");
 
                 $stmt = $db->prepare("UPDATE Accounts set nextAPY = TIMESTAMPADD(MONTH,:months,current_timestamp) WHERE id = :id");
