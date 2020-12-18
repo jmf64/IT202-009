@@ -7,15 +7,12 @@ if (!is_logged_in()) {
 }
 
 $user_id = get_user_id();
-$query = "";
 $results = [];
-if (isset($_POST["query"])) {
-    $query = $_POST["query"];
-}
-if (isset($_POST["search"]) && !empty($query)) {
+
+if (isset($_POST["search"])) {
     $db = getDB();
-    $stmt = $db->prepare("SELECT id, account_number, account_type, balance, user_id 
-from Accounts WHERE Accounts.user_id = :user_id LIMIT 5");
+    $stmt = $db->prepare("SELECT id, account_number, account_type, balance, apy, user_id 
+from Accounts WHERE Accounts.user_id = :user_id AND active = 1 LIMIT 5");
     $r = $stmt->execute([":user_id" => $user_id]);
     if ($r) {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -28,7 +25,6 @@ from Accounts WHERE Accounts.user_id = :user_id LIMIT 5");
 ?>
 <h3>List Accounts</h3>
 <form method="POST">
-    <input name="query" placeholder="Search" value="<?php safer_echo($query); ?>"/>
     <input type="submit" value="Search" name="search"/>
 </form>
 <div class="results">
@@ -46,7 +42,11 @@ from Accounts WHERE Accounts.user_id = :user_id LIMIT 5");
                     </div>
                     <div>
                         <div>Balance:</div>
-                        <div><?php safer_echo($r["balance"]); ?></div>
+                        <div><?php safer_echo(abs($r["balance"])); ?></div>
+                    </div>
+                    <div>
+                        <div>APY:</div>
+                        <div><?php safer_echo($r["apy"]); ?></div>
                     </div>
                     <div>
                         <div>Owner Id:</div>
@@ -54,6 +54,7 @@ from Accounts WHERE Accounts.user_id = :user_id LIMIT 5");
                     </div>
                     <div>
                         <a type="button" href="transaction_history.php?id=<?php safer_echo($r['id']);?>">View Transaction History</a>
+                        <a type="button" href="delete_account.php?id=<?php safer_echo($r['id']);?>">Delete This Account</a>
                     </div>
                 </div>
             <?php endforeach; ?>

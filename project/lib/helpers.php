@@ -80,7 +80,7 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $r = $stmt->execute([":id" => $source]);
     if ($r){
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $a1total = (int)$result["total"];
+        $a1total = (float)$result["total"];
     } else {
         flash("Error in source 1" . var_export($stmt->errorInfo(), true));
     }
@@ -89,7 +89,7 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $r = $stmt->execute([":id" => $destination]);
     if ($r){
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $a2total = (int)$result["total"];
+        $a2total = (float)$result["total"];
     } else {
         flash("Error in source 2" . var_export($stmt->errorInfo(), true));
     }
@@ -122,7 +122,7 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $r = $stmt->execute([":id" => $source]);
     if ($r){
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $a1total = (int)$result["total"];
+        $a1total = (float)$result["total"];
     } else {
         flash("Error in source 1 after balance updates " . var_export($stmt->errorInfo(), true));
     }
@@ -131,7 +131,7 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $r = $stmt->execute([":id" => $destination]);
     if ($r){
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $a2total = (int)$result["total"];
+        $a2total = (float)$result["total"];
     } else {
         flash("Error in source 2 after balance updates " . var_export($stmt->errorInfo(), true));
     }
@@ -143,5 +143,41 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $query2->execute([":id" => $destination, ":b" => $a2total]);
 
     //return $result;
+}
+
+function calcAPY(){
+    $db = getDB();
+    $stmt = $db->prepare("SELECT id FROM Accounts where account_number = '000000000000'");
+    $r = $stmt->execute();
+    if(!$r){
+        flash(var_export($stmt->errorInfo(), true), "danger");
+    }
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $world_id = $result["id"];
+    $numOfMonths = 1;//1 for monthly
+    $stmt = $db->prepare("SELECT id, apy, IFNULL(balance,0) as balance FROM Accounts WHERE (account_type != 'checking' AND account_type != 'World') AND IFNULL(nextAPY, TIMESTAMPADD(MONTH,:months,opened_date)) <= current_timestamp");
+    $r = $stmt->execute([":months"=>$numOfMonths]);
+    if($r){
+        $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if($accounts){
+            foreach($accounts as $account){
+                $apy = (float)$account["apy"];
+                //if monthly divide accordingly
+                $apy /= 12;
+                $balance = (float)$account["balance"];
+                $change = $balance * $apy;
+                doTransaction($world_id, $account["id"], ($change * -1), "interest", "APY Calc");
+
+                $stmt = $db->prepare("UPDATE Accounts set nextAPY = TIMESTAMPADD(MONTH,:months,current_timestamp) WHERE id = :id");
+                $r = $stmt->execute([":id"=>$account["id"], ":months"=>$numOfMonths]);
+                if(!$r){
+                    flash(var_export($stmt->errorInfo(), true), "danger");
+                }
+            }
+        }
+    }
+    else{
+        flash(var_export($stmt->errorInfo(), true), "danger");
+    }
 }
 ?>

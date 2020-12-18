@@ -40,9 +40,10 @@ if (isset($_POST["login"])) {
         flash("Invalid email");
     }
     if ($isValid) {
+        calcAPY();
         $db = getDB();
         if (isset($db)) {
-            $stmt = $db->prepare("SELECT id, email, username, password from Users WHERE email = :email or username = :username LIMIT 1");
+            $stmt = $db->prepare("SELECT id, email, username, password from Users WHERE (email = :email or username = :username) AND active = 1 LIMIT 1");
 
             $params = array(":email" => $email, ":username" => $username);
             $r = $stmt->execute($params);

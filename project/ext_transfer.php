@@ -8,13 +8,10 @@ if (!is_logged_in()) {
 
 $user_id = get_user_id();
 $db = getDB();
-$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE Accounts.user_id = :user_id LIMIT 25");
+$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE Accounts.user_id = :user_id AND active = 1 AND 
+frozen = 0 AND account_type != 'loan' LIMIT 25");
 $r = $stmt->execute([":user_id" => $user_id]);
 $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$stmt = $db->prepare("SELECT account_number, id FROM Accounts WHERE account_number != '000000000000' LIMIT 25");
-$r = $stmt->execute();
-$dest_accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
     <h3>Create Transaction</h3>
@@ -43,8 +40,8 @@ if (isset($_POST["save"])) {
     $last_name = $_POST["last_name"];
     $last_4 = $_POST["last_4"];
     $act_src_id = $_POST["act_src_id"];
-    $stmt = $db->prepare("SELECT a.id FROM Users u JOIN Accounts a on u.id = a.user_id WHERE u.last_name = :last_name AND 
-a.account_number LIKE :last_4 LIMIT 1");
+    $stmt = $db->prepare("SELECT a.id FROM Users u JOIN Accounts a on u.id = a.user_id WHERE u.last_name = :last_name
+    AND a.frozen = 0 AND a.active = 1 AND a.account_number LIKE :last_4 LIMIT 1");
     $r = $stmt->execute([":last_name" => $last_name, ":last_4" => "%$last_4"]);
     //echo var_export($stmt->errorInfo(), true);
     if ($r){
