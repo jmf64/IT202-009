@@ -164,8 +164,8 @@ function calcAPY(){
                 $apy = (float)$account["apy"];
                 //if monthly divide accordingly
                 $apy /= 12;
-                flash(var_export($apy, true));
                 $balance = (float)$account["balance"];
+                flash(var_export($balance, true));
                 $change = $balance * $apy;
                 doTransaction($world_id, $account["id"], ($change * -1), "interest", "APY Calc");
 
