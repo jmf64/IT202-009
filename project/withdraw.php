@@ -70,7 +70,7 @@ if (isset($_POST["save"])) {
     }
 
     if ($r && $isValid) {
-        flash("Transfer Successful");
+        flash("Withdraw Successful");
     } else if (!$isValid) {
         flash("Insufficient Balance");
     } else {
