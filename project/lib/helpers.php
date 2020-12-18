@@ -145,26 +145,26 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     //return $result;
 }
 
-//assumed Accounts table has an apy column for the rate and nextAPY timestamp column
 function calcAPY(){
     $db = getDB();
+    $stmt = $db->prepare("SELECT id FROM Accounts where account_number = '000000000000'");
+    $r = $stmt->execute();
+    if(!$r){
+        flash(var_export($stmt->errorInfo(), true), "danger");
+    }
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $world_id = $result["id"];
     $numOfMonths = 1;//1 for monthly
     $stmt = $db->prepare("SELECT id, apy, IFNULL(balance,0) FROM Accounts WHERE (account_type != 'checking' AND account_type != 'World') AND IFNULL(nextAPY, TIMESTAMPADD(MONTH,:months,opened_date)) <= current_timestamp");
     $r = $stmt->execute([":months"=>$numOfMonths]);
     if($r){
         $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if($accounts){
-            $stmt = $db->prepare("SELECT id FROM Accounts where account_number = '000000000000'");
-            $r = $stmt->execute();
-            if(!$r){
-                flash(var_export($stmt->errorInfo(), true), "danger");
-            }
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            $world_id = $result["id"];
             foreach($accounts as $account){
                 $apy = (float)$account["apy"];
                 //if monthly divide accordingly
                 $apy /= 12;
+                flash(var_export($apy, true));
                 $balance = (float)$account["balance"];
                 $change = $balance * $apy;
                 doTransaction($world_id, $account["id"], ($change * -1), "interest", "APY Calc");
