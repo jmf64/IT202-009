@@ -155,7 +155,7 @@ function calcAPY(){
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $world_id = $result["id"];
     $numOfMonths = 1;//1 for monthly
-    $stmt = $db->prepare("SELECT id, apy, IFNULL(balance,0) FROM Accounts WHERE (account_type != 'checking' AND account_type != 'World') AND IFNULL(nextAPY, TIMESTAMPADD(MONTH,:months,opened_date)) <= current_timestamp");
+    $stmt = $db->prepare("SELECT id, apy, IFNULL(balance,0) as balance FROM Accounts WHERE (account_type != 'checking' AND account_type != 'World') AND IFNULL(nextAPY, TIMESTAMPADD(MONTH,:months,opened_date)) <= current_timestamp");
     $r = $stmt->execute([":months"=>$numOfMonths]);
     if($r){
         $accounts = $stmt->fetchAll(PDO::FETCH_ASSOC);
