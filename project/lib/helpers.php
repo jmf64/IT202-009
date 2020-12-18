@@ -162,7 +162,7 @@ function calcAPY(){
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             $world_id = $result["id"];
             foreach($accounts as $account){
-                $apy = $account["apy"];
+                $apy = (float)$account["apy"];
                 //if monthly divide accordingly
                 $apy /= 12;
                 $balance = (float)$account["balance"];
