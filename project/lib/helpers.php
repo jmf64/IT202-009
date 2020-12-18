@@ -80,7 +80,7 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $r = $stmt->execute([":id" => $source]);
     if ($r){
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $a1total = (int)$result["total"];
+        $a1total = (float)$result["total"];
     } else {
         flash("Error in source 1" . var_export($stmt->errorInfo(), true));
     }
@@ -89,7 +89,7 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $r = $stmt->execute([":id" => $destination]);
     if ($r){
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $a2total = (int)$result["total"];
+        $a2total = (float)$result["total"];
     } else {
         flash("Error in source 2" . var_export($stmt->errorInfo(), true));
     }
@@ -122,7 +122,7 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $r = $stmt->execute([":id" => $source]);
     if ($r){
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $a1total = (int)$result["total"];
+        $a1total = (float)$result["total"];
     } else {
         flash("Error in source 1 after balance updates " . var_export($stmt->errorInfo(), true));
     }
@@ -131,7 +131,7 @@ function doTransaction($source, $destination, $amount, $type, $memo) {
     $r = $stmt->execute([":id" => $destination]);
     if ($r){
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $a2total = (int)$result["total"];
+        $a2total = (float)$result["total"];
     } else {
         flash("Error in source 2 after balance updates " . var_export($stmt->errorInfo(), true));
     }
@@ -166,7 +166,6 @@ function calcAPY(){
                 $apy /= 12;
                 $balance = (float)$account["balance"];
                 $change = $balance * $apy;
-                flash(var_export($change, true));
                 doTransaction($world_id, $account["id"], ($change * -1), "interest", "APY Calc");
 
                 $stmt = $db->prepare("UPDATE Accounts set nextAPY = TIMESTAMPADD(MONTH,:months,current_timestamp) WHERE id = :id");
